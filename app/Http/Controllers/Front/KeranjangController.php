@@ -21,7 +21,7 @@ class KeranjangController extends Controller
             $data = $request->all();
             $detailKeranjang = Keranjang::find($data['cartid']);
 
-            $stokTersedia = ProdukDetail::select('stok')->where([
+            $stokTersedia = ProdukDetail::select(['id', 'stok'])->where([
                 'id'=>$detailKeranjang['produk_detail_id']])
                     ->first()
                     ->toArray();
@@ -37,6 +37,10 @@ class KeranjangController extends Controller
                     'msg' => "Kuantitas produk tidak boleh kurang dari 0"
                 ]);
             }else{
+                ProdukDetail::where('id', $stokTersedia['id'])->update([
+                    'stok' => $stokTersedia['stok'] - ($data['kts'] - $detailKeranjang->kuantitas)
+                ]);
+
                 Keranjang::where('id', $data['cartid'])->update([
                     'kuantitas'=>$data['kts']
                 ]);
@@ -51,11 +55,24 @@ class KeranjangController extends Controller
     public function hapus_produk_dalam_keranjang(Request $request){
         if($request->ajax()){
             $data = $request->all();
-            Keranjang::where('id', $data['keranjang_id'])->delete();
+            $data_keranjang = Keranjang::where('id', $data['keranjang_id'])->first();
+
+            $data_produk_detail = ProdukDetail::where([
+                'id' => $data_keranjang->produk_detail_id,
+                'produk_id' => $data_keranjang->produk_id
+            ])->first();
+
+            $data_produk_detail->update([
+                'stok' => $data_produk_detail->stok + $data_keranjang->kuantitas
+            ]);
+            $data_keranjang->delete();
+
             return response()->json([
                 'status_hapus_produk' => 1,
                 'msg' => 'Produk telah di hapus dalam keranjang',
-                'total_produk_keranjang'=> help_total_produk_keranjang()
+                'total_produk_keranjang'=> help_total_produk_keranjang(),
+                'data_keranjang_terbaru' => help_data_isi_keranjang_baru(),
+                'total_harga_produk_dlm_keranjang' => help_total_harga_produk_keranjang()
             ]);
         }
     }

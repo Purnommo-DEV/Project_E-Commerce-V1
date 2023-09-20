@@ -6,7 +6,9 @@
 <body>
     @include('sweetalert::alert')
     <div class="page-wrapper">
-        @include('Front.layout._header')
+        @if (!request()->routeIs('Login') && !request()->routeIs('Register'))
+            @include('Front.layout._header')
+        @endif
 
         <main class="main">
             @if (!request()->routeIs('HalamanBeranda') && !request()->routeIs('Login') && !request()->routeIs('Register'))
@@ -15,8 +17,9 @@
             @endif
             @yield('konten')
         </main>
-
-        @include('Front.layout._footer')
+        @if (!request()->routeIs('Login') && !request()->routeIs('Register'))
+            @include('Front.layout._footer')
+        @endif
 
         <!-- End .footer -->
     </div>
@@ -506,6 +509,7 @@
     </div> --}}
     @include('Front.layout._script')
     @yield('script')
+    @stack('script')
 </body>
 
 <!-- molla/index-13.html  22 Nov 2019 09:59:31 GMT -->

@@ -37,8 +37,8 @@
                                             <div class="row mb-3">
                                                 <label class="col col-form-label" for="plat">Gambar</label>
                                                 <div class="col-md-9">
-                                                    <input type="file" name="path" class="form-control"
-                                                        id="exampleInputPassword1">
+                                                    <input type="file" accept="image/*" name="path"
+                                                        class="form-control" id="exampleInputPassword1">
                                                 </div>
                                                 <div class="input-group has-validation">
                                                     <label class="text-danger error-text path_error"></label>
@@ -103,7 +103,8 @@
                         <div class="row mb-3">
                             <label class="col col-form-label" for="plat">Gambar</label>
                             <div class="col-md-9">
-                                <input type="file" name="path" class="form-control" id="exampleInputPassword1">
+                                <input type="file" accept="image/*" name="path" class="form-control"
+                                    id="exampleInputPassword1">
                             </div>
                         </div>
                     </div>
@@ -173,7 +174,7 @@
                     "class": "text-wrap text-center",
                     "render": function(data, type, row, meta) {
                         daftar_data_kategori[row.id] = row;
-                        return `<img src="/storage/${row.path}" width="100">`
+                        return `<img src="/storage/${row.path}" width="100" style="aspect-ratio: 4/3;">`
                     }
                 },
                 {
@@ -296,8 +297,6 @@
         //     $(document).find('label.error-text').text('');
         //     $("#role").empty().append('');
         // })
-
-
         $(document).on('click', '.hapus_kategori', function(event) {
             const id = $(event.currentTarget).attr('id-kategori');
 

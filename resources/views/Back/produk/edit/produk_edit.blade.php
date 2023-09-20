@@ -279,8 +279,8 @@
                                                 <div class="mb-3">
                                                     <label for="nama-produk" class="col-form-label">Gambar
                                                         Produk</label>
-                                                    <input type="file" class="form-control imageUpload" name="path[]"
-                                                        multiple>
+                                                    <input type="file" accept="image/*"
+                                                        class="form-control imageUpload" name="path[]" multiple>
                                                     <div class="input-group has-validation">
                                                         <label class="text-danger error-text path_error"></label>
                                                     </div>

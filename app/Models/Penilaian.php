@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Penilaian extends Model
+{
+    use HasFactory;
+    protected $table = 'penilaian';
+    protected $guarded = ['id'];
+
+    public function relasi_pesanan_detail(){
+        return $this->belongsTo(PesananDetail::class, 'pesanan_detail_id', 'id');
+    }
+}

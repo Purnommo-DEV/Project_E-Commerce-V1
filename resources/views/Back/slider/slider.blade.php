@@ -26,8 +26,7 @@
                                             <div class="row mb-3">
                                                 <label class="col col-form-label" for="judul">Judul</label>
                                                 <div class="col-md-9">
-                                                    <input type="text" name="judul" class="form-control"
-                                                        id="exampleInputPassword1" placeholder="Judul">
+                                                    <textarea type="text" name="judul" class="ckeditor form-control" id="exampleInputPassword1" placeholder="Judul"></textarea>
                                                 </div>
                                                 <div class="input-group has-validation">
                                                     <label class="text-danger error-text judul_error"></label>
@@ -36,8 +35,8 @@
                                             <div class="row mb-3">
                                                 <label class="col col-form-label" for="plat">Gambar</label>
                                                 <div class="col-md-9">
-                                                    <input type="file" name="gambar" class="form-control"
-                                                        id="exampleInputPassword1">
+                                                    <input type="file" accept="image/*" name="gambar"
+                                                        class="form-control" id="exampleInputPassword1">
                                                 </div>
                                                 <div class="input-group has-validation">
                                                     <label class="text-danger error-text gambar_error"></label>
@@ -63,6 +62,7 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Judul</th>
+                                    <th>Sub Judul</th>
                                     <th>Gambar</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -92,8 +92,7 @@
                         <div class="row mb-3">
                             <label class="col col-form-label" for="judul">Judul</label>
                             <div class="col-md-9">
-                                <input type="text" name="judul" class="form-control" id="exampleInputPassword1"
-                                    placeholder="Judul">
+                                <textarea type="text" name="judul" class="ckeditor form-control" id="judulEdit" placeholder="Judul"></textarea>
                             </div>
                             <div class="input-group has-validation">
                                 <label class="text-danger error-text judul_error"></label>
@@ -102,7 +101,8 @@
                         <div class="row mb-3">
                             <label class="col col-form-label" for="plat">Gambar</label>
                             <div class="col-md-9">
-                                <input type="file" name="gambar" class="form-control" id="exampleInputPassword1">
+                                <input type="file" accept="image/*" name="gambar" class="form-control"
+                                    id="exampleInputPassword1">
                             </div>
                             <div class="input-group has-validation">
                                 <label class="text-danger error-text gambar_error"></label>
@@ -175,11 +175,19 @@
                     "class": "text-wrap text-center",
                     "render": function(data, type, row, meta) {
                         daftar_data_slider[row.id] = row;
-                        return `<img src="/storage/${row.gambar}" width="100">`
+                        return row.subjudul;
                     }
                 },
                 {
                     "targets": 3,
+                    "class": "text-wrap text-center",
+                    "render": function(data, type, row, meta) {
+                        daftar_data_slider[row.id] = row;
+                        return `<img src="/storage/${row.gambar}" width="100">`
+                    }
+                },
+                {
+                    "targets": 4,
                     "class": "text-nowrap text-center",
                     "render": function(data, type, row, meta) {
                         let tampilan;
@@ -242,14 +250,18 @@
             });
         });
 
+        // CKEDITOR.replace('judulEdit');
+        //     var editorData= CKEDITOR.instances['judulEdit'].getData();
+
         $(document).on('click', '.edit_slider', function(event) {
             const id = $(event.currentTarget).attr('id-slider');
-            const data_slider = daftar_data_slider[id]
-            $("#modalEditDataSlider").modal('show');
+            const data_slider = daftar_data_slider[id];
+            var editorData = CKEDITOR.instances['judulEdit'].setData(data_slider.judul);
+            $("#modalEditDataSlider").modal('show')
             $("#formEditDataSlider [name='id']").val(id)
-            $("#formEditDataSlider [name='judul']").val(data_slider.judul);
+            $("#formEditDataSlider [name='judul']").text(data_slider.judul);
             // $("#formEditDataSlider [name='gambar']").val(data_slider.gambar);
-
+            CKEDITOR.replace('judulEdit');
             $('#formEditDataSlider').on('submit', function(e) {
                 e.preventDefault();
                 $.ajax({

@@ -199,8 +199,8 @@
                                                 <div class="col-md-12">
                                                     <div class="mb-3">
                                                         <label for="recipient-name" class="col-form-label">Gambar</label>
-                                                        <input type="file" name="path[]" class="form-control"
-                                                            multiple>
+                                                        <input type="file" accept="image/*" name="path[]"
+                                                            accept="image/*" class="form-control" multiple>
                                                         <div class="input-group has-validation">
                                                             <label class="text-danger error-text path_error"></label>
                                                         </div>

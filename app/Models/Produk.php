@@ -18,4 +18,8 @@ class Produk extends Model
     public function relasi_tipe(){
         return $this->belongsTo(ProdukTipe::class, 'produk_tipe_id', 'id');
     }
+
+    public function relasi_gambar(){
+        return $this->belongsTo(ProdukGambar::class, 'id', 'produk_id');
+    }
 }

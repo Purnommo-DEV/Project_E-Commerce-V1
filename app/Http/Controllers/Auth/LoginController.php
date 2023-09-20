@@ -60,7 +60,7 @@ class LoginController extends Controller
                 return response()->json([
                     'status' => 1,
                     'msg' => 'Berhasil login sebagai Admin !',
-                    'route' => route('admin.HalamanDashboard')
+                    'route' => route('admin.HalamanPesanan')
                 ]);
             }
             elseif (auth()->user()->role_id == 2) {

@@ -85,16 +85,28 @@ class ProdukController extends Controller
                             'total_bayar' => $produk_detail['harga'] * $request->kuantitas,
                         ]);
 
+                        $produk_detail = ProdukDetail::where([
+                            'id' => $request->produk_detail_id,
+                            'produk_id' => $request->produk_id,
+                            ])->first();
+
+                        $produk_detail->update([
+                            'stok' => $produk_detail->stok - $request->kuantitas
+                        ]);
+
                         if (!$tmb_produk_keranjang) {
                             return response()->json([
                                 'status_tmb_keranjang' => 0,
                                 'msg' => 'Terjadi kesalahan, Gagal Menambahkan Produk Ke Keranjang'
                             ]);
                         } else {
+
                             return response()->json([
                                 'status_tmb_keranjang' => 1,
                                 'msg' => 'Berhasil Menambahkan Produk Ke Keranjang',
-                                'total_produk_keranjang'=> help_total_produk_keranjang()
+                                'total_produk_keranjang' => help_total_produk_keranjang(),
+                                'data_keranjang_terbaru' => help_data_isi_keranjang_baru(),
+                                'total_harga_produk_dlm_keranjang' => help_total_harga_produk_keranjang()
                             ]);
                         }
                     }

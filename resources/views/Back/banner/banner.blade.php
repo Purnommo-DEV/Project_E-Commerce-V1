@@ -25,10 +25,9 @@
                                         @csrf
                                         <div class="modal-body">
                                             <div class="row mb-3">
-                                                <label class="col col-form-label" for="kategori">Judul</label>
+                                                <label class="col col-form-label" for="judul">Judul</label>
                                                 <div class="col-md-9">
-                                                    <input type="text" name="judul" class="form-control"
-                                                        id="exampleInputPassword1" placeholder="Judul">
+                                                    <textarea type="text" name="judul" class="ckeditor form-control" id="exampleInputPassword1" placeholder="Judul"></textarea>
                                                 </div>
                                                 <div class="input-group has-validation">
                                                     <label class="text-danger error-text judul_error"></label>
@@ -37,8 +36,8 @@
                                             <div class="row mb-3">
                                                 <label class="col col-form-label" for="plat">Gambar</label>
                                                 <div class="col-md-9">
-                                                    <input type="file" name="gambar" class="form-control"
-                                                        id="exampleInputPassword1">
+                                                    <input type="file" accept="image/*" name="gambar"
+                                                        class="form-control" id="exampleInputPassword1">
                                                 </div>
                                                 <div class="input-group has-validation">
                                                     <label class="text-danger error-text gambar_error"></label>
@@ -93,8 +92,7 @@
                         <div class="row mb-3">
                             <label class="col col-form-label" for="judul">Judul</label>
                             <div class="col-md-9">
-                                <input type="text" name="judul" class="form-control" id="exampleInputPassword1"
-                                    placeholder="Judul">
+                                <textarea type="text" name="judul" class="ckeditor form-control" id="judulEdit" placeholder="Judul"></textarea>
                             </div>
                             <div class="input-group has-validation">
                                 <label class="text-danger error-text judul_error"></label>
@@ -103,7 +101,8 @@
                         <div class="row mb-3">
                             <label class="col col-form-label" for="plat">Gambar</label>
                             <div class="col-md-9">
-                                <input type="file" name="gambar" class="form-control" id="exampleInputPassword1">
+                                <input type="file" accept="image/*" name="gambar" class="form-control"
+                                    id="exampleInputPassword1">
                             </div>
                             <div class="input-group has-validation">
                                 <label class="text-danger error-text gambar_error"></label>
@@ -247,10 +246,10 @@
             const id = $(event.currentTarget).attr('id-banner');
             const data_banner = daftar_data_banner[id]
             $("#modalEditDataBanner").modal('show');
+            var editorData = CKEDITOR.instances['judulEdit'].setData(data_banner.judul);
             $("#formEditDataBanner [name='id']").val(id)
             $("#formEditDataBanner [name='judul']").val(data_banner.judul);
             // $("#formEditDataBanner [name='gambar']").val(data_banner.gambar);
-
             $('#formEditDataBanner').on('submit', function(e) {
                 e.preventDefault();
                 $.ajax({
@@ -283,13 +282,15 @@
                                     toast.addEventListener('mouseleave', Swal
                                         .resumeTimer)
                                 }
-                            })
+                            });
 
                             Toast.fire({
                                 icon: 'success',
                                 title: data.msg
-                            })
+                            });
+                            $('#formEditDataBanner').trigger('reset');
                             table_data_banner.ajax.reload(null, false);
+                            return false;
                         }
                     }
                 });

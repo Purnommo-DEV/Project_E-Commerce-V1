@@ -6,8 +6,9 @@
             <div class="product-details-top mb-2">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="product-gallery product-gallery-vertical">
+                        <div class="product-gallery">
                             <div class="row">
+
                                 <figure class="product-main-image">
                                     @php
                                         $produk_gambar_1 = \App\Models\ProdukGambar::where('produk_id', $produk->id)->first();
@@ -15,7 +16,7 @@
                                             ->select('harga', 'id')
                                             ->first();
                                     @endphp
-                                    <img class="product-image object-fit-fill border rounded" style="aspect-ratio: 4/3;"
+                                    <img class="product-image object-fit-fill border rounded" style="aspect-ratio: 2/2;"
                                         id="product-zoom" src="{{ asset('storage/' . $produk_gambar_1->path) }}"
                                         data-zoom-image="{{ asset('storage/' . $produk_gambar_1->path) }}"
                                         alt="product image">
@@ -24,9 +25,62 @@
                                         <i class="icon-arrows"></i>
                                     </a>
                                 </figure><!-- End .product-main-image -->
+                                <div class="owl-carousel carousel-theme carousel-simple carousel-with-shadow row cols-2 cols-xs-3 cols-sm-4 cols-md-5 cols-lg-6 cols-xl-8"
+                                    data-toggle="owl"
+                                    data-owl-options='{
+                                        "nav": false,
+                                        "dots": false,
+                                        "loop": false,
+                                        "responsive": {
+                                            "0": {
+                                                "items":4
+                                            },
+                                            "480": {
+                                                "items":4
+                                            },
+                                            "576": {
+                                                "items":5
+                                            },
+                                            "768": {
+                                                "items":5
+                                            },
+                                            "992": {
+                                                "items":7
+                                            },
+                                            "1200": {
+                                                "items":8
+                                            }
+                                        }
+                                    }'
+                                    style="padding: 0 !important; margin-left: 0rem !important; margin-right: 0rem !important;">
 
-                                <div id="product-zoom-gallery" class="product-image-gallery">
+                                    @foreach ($produk_gambar as $index => $data_produk_gambar)
+                                        <div id="product-zoom-gallery" class="product-image-gallery">
+                                            <a class="product-gallery-item @if ($index == 0) {{ 'active' }} @endif"
+                                                href="#"
+                                                data-image="{{ asset('storage/' . $data_produk_gambar->path) }}"
+                                                data-zoom-image="{{ asset('storage/' . $data_produk_gambar->path) }}">
+                                                <img class="product-image object-fit-fill border rounded"
+                                                    style="aspect-ratio: 2/2;"
+                                                    src="{{ asset('storage/' . $data_produk_gambar->path) }}"
+                                                    alt="product side">
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                {{-- <div id="product-zoom-gallery" class="product-image-gallery">
                                     @foreach ($produk_gambar as $data_produk_gambar)
+                                     <a class="product-gallery-item @if ($index == 0) {{ 'active' }} @endif"
+                                                href="#"
+                                                data-image="{{ asset('storage/' . $data_produk_gambar->path) }}"
+                                                data-zoom-image="{{ asset('storage/' . $data_produk_gambar->path) }}">
+                                                <img class="product-image object-fit-fill border rounded"
+                                                    style="aspect-ratio: 4/3;"
+                                                    src="{{ asset('storage/' . $data_produk_gambar->path) }}"
+                                                    alt="product side">
+                                            </a>
+
+
                                         <a class="product-gallery-item active" href="#"
                                             data-image="{{ asset('storage/' . $data_produk_gambar->path) }}"
                                             data-zoom-image="{{ asset('storage/' . $data_produk_gambar->path) }}">
@@ -36,26 +90,26 @@
                                                 alt="product side">
                                         </a>
                                     @endforeach
-                                </div><!-- End .product-image-gallery -->
+                                </div><!-- End .product-image-gallery --> --}}
                             </div><!-- End .row -->
                         </div><!-- End .product-gallery -->
                     </div><!-- End .col-md-6 -->
 
                     <div class="col-md-6">
-                        <div class="product-details product-details-centered">
+                        <div class="product-details">
                             <h1 class="product-title">{{ $produk->nama_produk }}</h1><!-- End .product-title -->
 
                             <div class="ratings-container">
                                 <div class="ratings">
                                     <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
                                 </div><!-- End .ratings -->
-                                <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>
+                                <span class="ratings-text" style="color:black;">| 20 Penilaian | 25 Terjual</span>
                             </div><!-- End .rating-container -->
                             <div class="product-price">
                                 @if ($produk->produk_tipe_id == 1)
-                                    @currency($produk_biasa->harga)
+                                    <span id="harga">@currency($produk_biasa->harga)</span>
                                 @elseif($produk->produk_tipe_id == 2)
-                                    @currency($produk_detail->harga)
+                                    <span id="harga">@currency($produk_detail->harga)</span>
                                 @endif
                             </div><!-- End .product-price -->
 
@@ -89,7 +143,36 @@
 
                                 <input type="hidden" name="produk_id" value="{{ $produk->id }}" hidden>
 
+                                {{-- <div class="details-filter-row details-row-size">
+                                    <label>Color:</label>
+
+                                    <div class="product-nav product-nav-thumbs">
+                                        <a href="#" class="active">
+                                            <img src="assets/images/products/single/1-thumb.jpg" alt="product desc">
+                                        </a>
+                                        <a href="#">
+                                            <img src="assets/images/products/single/2-thumb.jpg" alt="product desc">
+                                        </a>
+                                    </div><!-- End .product-nav -->
+                                </div><!-- End .details-filter-row --> --}}
+
+
+
+                                <div class="details-filter-row details-row-size">
+                                    <label for="qty">Kuantitas :</label>
+                                    <div class="product-details-quantity">
+                                        <input type="number" name="kuantitas" id="kuantitas" class="form-control"
+                                            value="1" min="1" max="" step="1" data-decimals="0"
+                                            required>
+                                    </div><!-- End .product-details-quantity -->
+                                </div><!-- End .details-filter-row -->
+
                                 <div class="product-details-action">
+                                    <button type="submit" class="btn-product btn-cart"><span>add to
+                                            cart</span></button>
+                                </div><!-- End .product-details-action -->
+
+                                {{-- <div class="product-details-action">
                                     <div class="details-action-col">
                                         <div class="product-details-quantity">
                                             <input type="number" name="kuantitas" id="kuantitas" class="form-control"
@@ -98,15 +181,15 @@
                                         </div><!-- End .product-details-quantity -->
                                         <button type="submit" class="btn-product btn-cart"><span>add to
                                                 cart</span></button>
-                                    </div><!-- End .details-action-col -->
+                                    </div><!-- End .details-action-col --> --}}
 
-                                    {{-- <div class="details-action-wrapper">
+                                {{-- <div class="details-action-wrapper">
                                     <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to
                                             Wishlist</span></a>
                                     <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to
                                             Compare</span></a>
                                 </div><!-- End .details-action-wrapper --> --}}
-                                </div><!-- End .product-details-action -->
+                                {{-- </div><!-- End .product-details-action --> --}}
                             </form>
 
 
@@ -280,242 +363,8 @@
                     </div><!-- .End .tab-pane -->
                 </div><!-- End .tab-content -->
             </div><!-- End .product-details-tab -->
-
-            <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
-            <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
-                data-owl-options='{
-                "nav": false,
-                "dots": true,
-                "margin": 20,
-                "loop": false,
-                "responsive": {
-                    "0": {
-                        "items":1
-                    },
-                    "480": {
-                        "items":2
-                    },
-                    "768": {
-                        "items":3
-                    },
-                    "992": {
-                        "items":4
-                    },
-                    "1200": {
-                        "items":4,
-                        "nav": true,
-                        "dots": false
-                    }
-                }
-            }'>
-                <div class="product product-7 text-center">
-                    <figure class="product-media">
-                        <span class="product-label label-new">New</span>
-                        <a href="product.html">
-                            <img src="assets/images/products/product-4.jpg" alt="Product image" class="product-image">
-                        </a>
-
-                        <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                    wishlist</span></a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                                title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare"
-                                title="Compare"><span>Compare</span></a>
-                        </div><!-- End .product-action-vertical -->
-
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        </div><!-- End .product-action -->
-                    </figure><!-- End .product-media -->
-
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">Women</a>
-                        </div><!-- End .product-cat -->
-                        <h3 class="product-title"><a href="product.html">Brown paperbag waist <br>pencil skirt</a></h3>
-                        <!-- End .product-title -->
-                        <div class="product-price">
-                            $60.00
-                        </div><!-- End .product-price -->
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
-                            </div><!-- End .ratings -->
-                            <span class="ratings-text">( 2 Reviews )</span>
-                        </div><!-- End .rating-container -->
-
-                        <div class="product-nav product-nav-dots">
-                            <a href="#" class="active" style="background: #cc9966;"><span class="sr-only">Color
-                                    name</span></a>
-                            <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
-                            <a href="#" style="background: #806b3e;"><span class="sr-only">Color name</span></a>
-                        </div><!-- End .product-nav -->
-                    </div><!-- End .product-body -->
-                </div><!-- End .product -->
-
-                <div class="product product-7 text-center">
-                    <figure class="product-media">
-                        <span class="product-label label-out">Out of Stock</span>
-                        <a href="product.html">
-                            <img src="assets/images/products/product-6.jpg" alt="Product image" class="product-image">
-                        </a>
-
-                        <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                    wishlist</span></a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                                title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare"
-                                title="Compare"><span>Compare</span></a>
-                        </div><!-- End .product-action-vertical -->
-
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        </div><!-- End .product-action -->
-                    </figure><!-- End .product-media -->
-
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">Jackets</a>
-                        </div><!-- End .product-cat -->
-                        <h3 class="product-title"><a href="product.html">Khaki utility boiler jumpsuit</a></h3>
-                        <!-- End .product-title -->
-                        <div class="product-price">
-                            <span class="out-price">$120.00</span>
-                        </div><!-- End .product-price -->
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                            </div><!-- End .ratings -->
-                            <span class="ratings-text">( 6 Reviews )</span>
-                        </div><!-- End .rating-container -->
-                    </div><!-- End .product-body -->
-                </div><!-- End .product -->
-
-                <div class="product product-7 text-center">
-                    <figure class="product-media">
-                        <span class="product-label label-top">Top</span>
-                        <a href="product.html">
-                            <img src="assets/images/products/product-11.jpg" alt="Product image" class="product-image">
-                        </a>
-
-                        <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                    wishlist</span></a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                                title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare"
-                                title="Compare"><span>Compare</span></a>
-                        </div><!-- End .product-action-vertical -->
-
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        </div><!-- End .product-action -->
-                    </figure><!-- End .product-media -->
-
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">Shoes</a>
-                        </div><!-- End .product-cat -->
-                        <h3 class="product-title"><a href="product.html">Light brown studded Wide fit wedges</a></h3>
-                        <!-- End .product-title -->
-                        <div class="product-price">
-                            $110.00
-                        </div><!-- End .product-price -->
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                            </div><!-- End .ratings -->
-                            <span class="ratings-text">( 1 Reviews )</span>
-                        </div><!-- End .rating-container -->
-
-                        <div class="product-nav product-nav-dots">
-                            <a href="#" class="active" style="background: #8b513d;"><span class="sr-only">Color
-                                    name</span></a>
-                            <a href="#" style="background: #333333;"><span class="sr-only">Color name</span></a>
-                            <a href="#" style="background: #d2b99a;"><span class="sr-only">Color name</span></a>
-                        </div><!-- End .product-nav -->
-                    </div><!-- End .product-body -->
-                </div><!-- End .product -->
-
-                <div class="product product-7 text-center">
-                    <figure class="product-media">
-                        <a href="product.html">
-                            <img src="assets/images/products/product-10.jpg" alt="Product image" class="product-image">
-                        </a>
-
-                        <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                    wishlist</span></a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                                title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare"
-                                title="Compare"><span>Compare</span></a>
-                        </div><!-- End .product-action-vertical -->
-
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        </div><!-- End .product-action -->
-                    </figure><!-- End .product-media -->
-
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">Jumpers</a>
-                        </div><!-- End .product-cat -->
-                        <h3 class="product-title"><a href="product.html">Yellow button front tea top</a></h3>
-                        <!-- End .product-title -->
-                        <div class="product-price">
-                            $56.00
-                        </div><!-- End .product-price -->
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
-                            </div><!-- End .ratings -->
-                            <span class="ratings-text">( 0 Reviews )</span>
-                        </div><!-- End .rating-container -->
-                    </div><!-- End .product-body -->
-                </div><!-- End .product -->
-
-                <div class="product product-7 text-center">
-                    <figure class="product-media">
-                        <a href="product.html">
-                            <img src="assets/images/products/product-7.jpg" alt="Product image" class="product-image">
-                        </a>
-
-                        <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                    wishlist</span></a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                                title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare"
-                                title="Compare"><span>Compare</span></a>
-                        </div><!-- End .product-action-vertical -->
-
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        </div><!-- End .product-action -->
-                    </figure><!-- End .product-media -->
-
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">Jeans</a>
-                        </div><!-- End .product-cat -->
-                        <h3 class="product-title"><a href="product.html">Blue utility pinafore denim dress</a></h3>
-                        <!-- End .product-title -->
-                        <div class="product-price">
-                            $76.00
-                        </div><!-- End .product-price -->
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
-                            </div><!-- End .ratings -->
-                            <span class="ratings-text">( 2 Reviews )</span>
-                        </div><!-- End .rating-container -->
-                    </div><!-- End .product-body -->
-                </div><!-- End .product -->
-            </div><!-- End .owl-carousel -->
-        </div><!-- End .container -->
+        </div><!-- End .owl-carousel -->
+    </div><!-- End .container -->
     </div><!-- End .page-content -->
 @endsection
 @section('script')
@@ -533,6 +382,7 @@
             }
         });
 
+
         $("#produk_detail_id").change(function() {
             var produk_detail_id = $(this).val();
             var data_max = $(this).attr('max');
@@ -541,6 +391,14 @@
                 alert("Mohon Pilih Variasi");
                 return false;
             }
+
+            const {
+                format
+            } = new Intl.NumberFormat('id-ID', {
+                style: "currency",
+                currency: "IDR",
+                minimumFractionDigits: 0
+            });
 
             $.ajax({
                 url: '/response-produk-variasi',
@@ -553,14 +411,8 @@
                 type: 'post',
                 success: function(response) {
                     let harga = response.resp_produk_variasi.harga;
-                    let harga_produk_variasi = harga.toLocaleString("id-ID", {
-                        style: "currency",
-                        currency: "IDR"
-                    });
                     $('#kuantitas').attr("max", response.resp_produk_variasi.stok).val(1);
-                    $('.product-price').html(harga_produk_variasi).toString().replace(
-                        /(\d)(?=(\d{3})+(?!\d))/g,
-                        "Rp.");
+                    $('#harga').html(format(harga));
                 },
                 error: function() {
                     alert("error");
@@ -676,8 +528,10 @@
                             icon: 'success',
                             title: data.msg
                         });
+                        $("#data_keranjang_header").html(data.data_keranjang_terbaru);
                         $('.total_produk_keranjang_class').html(data
-                            .total_produk_keranjang)
+                            .total_produk_keranjang);
+                        $(".cart-total-price").html(data.total_harga_produk_dlm_keranjang);
                     }
                 }
             });

@@ -1,14 +1,14 @@
 @extends('Front.layout.master', ['title' => 'Register'])
 @section('konten')
     <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
-        style="background-image: url({{ asset('gambar/bg_loginRegister/bg.jpg') }})">
+        style="background-image: url({{ asset('Front/assets/images/slide-3.jpg') }})">
         <div class="container">
             <div class="form-box">
                 <div class="form-tab">
                     <ul class="nav nav-pills nav-fill" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="signin-tab-2" data-toggle="tab" href="#signin-2" role="tab"
-                                aria-controls="signin-2" aria-selected="false">Selamat Datang di </a>
+                                aria-controls="signin-2" aria-selected="false">Selamat Datang</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -22,8 +22,7 @@
                                         <div class="form-group">
                                             <label for="singin-email-2">Nama Lengkap</label>
                                             <input type="text" id="frm-reg-lname" name="name"
-                                                class="form-control @error('name') is-invalid @enderror"
-                                                placeholder="Purnomo Dev">
+                                                class="form-control @error('name') is-invalid @enderror" placeholder="Nama">
                                             <div class="input-group has-validation">
                                                 <label class="text-danger error-text name_error"></label>
                                             </div>
@@ -53,10 +52,10 @@
                                             <input type="password" id="frm-reg-pass" name="password"
                                                 class="form-control @error('password') is-invalid @enderror"
                                                 placeholder="Password">
-                                            <span class="input-group-text" onclick="password_login_show();">
+                                            {{-- <span class="input-group-text" onclick="password_login_show();">
                                                 <i class="fas fa-eye" id="show_eye"></i>
                                                 <i class="fas fa-eye-slash d-none" id="hide_eye"></i>
-                                            </span>
+                                            </span> --}}
                                             <div class="input-group has-validation">
                                                 <label class="text-danger error-text password_error"></label>
                                             </div>

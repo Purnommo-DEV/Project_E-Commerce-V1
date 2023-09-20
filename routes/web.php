@@ -5,12 +5,17 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Back\AdminBanner_Controller;
 use App\Http\Controllers\Back\AdminDashboard_Controller;
 use App\Http\Controllers\Back\AdminKategori_Controller;
+use App\Http\Controllers\Back\AdminLaporan_Controller;
+use App\Http\Controllers\Back\AdminPesanan_Controller;
 use App\Http\Controllers\Back\AdminProduk_Controller;
 use App\Http\Controllers\Back\AdminSlider_Controller;
 use App\Http\Controllers\Front\BerandaController;
+use App\Http\Controllers\Front\KategoriController;
 use App\Http\Controllers\Front\KeranjangController;
 use App\Http\Controllers\Front\PembayaranController;
+use App\Http\Controllers\Front\PesananController;
 use App\Http\Controllers\Front\ProdukController;
+use App\Http\Controllers\Front\ProfilController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +32,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [BerandaController::class, 'halaman_beranda'])->name('HalamanBeranda');
 Route::get('detail-produk/{slug}', [ProdukController::class, 'halaman_detail_produk'])->name('HalamanDetailProduk');
 Route::post('/response-produk-variasi', [ProdukController::class, 'resp_produk_variasi']);
+Route::get('/kategori-detail/{slug}', [KategoriController::class, 'halaman_kategori_detail'])->name('KategoriDetail');
+Route::get('/filter-urutkan', [KategoriController::class, 'filter_urutkan'])->name('FilterUrtukan');
 
 
 Route::middleware(['guest'])->group(function () {
@@ -93,10 +100,40 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/hapus-data-slider/{slider_id}', 'hapus_data_slider');
         });
 
+        Route::controller(AdminPesanan_Controller::class)->group(function (){
+            Route::get('/halaman_pesanan', 'halaman_pesanan')->name('HalamanPesanan');
+            Route::any('/data-pesanan', 'data_pesanan')->name('DataPesanan');
+            Route::get('/detail-pesanan/{id}', 'detail_pesanan')->name('HalamanPesanan.DetailPesanan');
+            Route::post('/verifikasi-pesanan', 'verifikasi_pesanan')->name('VerifikasiPesanan');
+            Route::post('/perbarui-status-pesanan', 'perbarui_status_pesanan')->name('PerbaruiStatusPesanan');
+            Route::post('/batalkan-pesanan-oleh-admin', 'batalkan_pesanan_oleh_admin')->name('BatalkanPesananOlehAdmin');
+        });
+
+        Route::controller(AdminLaporan_Controller::class)->group(function (){
+            Route::get('/laporan-pendapatan', 'halaman_laporan_pendapatan')->name('HalamanLaporan.Pendapatan');
+            Route::any('/data-laporan-pendapatan', 'data_laporan_pendapatan')->name('DataLaporanPendapatan');
+            Route::post('/cetak-laporan-pendapatan', 'cetak_laporan_pendapatan')->name('CetakLaporanPendapatan');
+
+            Route::get('/laporan-produk', 'halaman_laporan_produk')->name('HalamanLaporan.Produk');
+            Route::any('/data-laporan-produk', 'data_laporan_produk')->name('DataLaporanProduk');
+            Route::post('/cetak-laporan-produk', 'cetak_laporan_produk')->name('CetakLaporanProduk');
+
+            Route::get('/laporan-inventory', 'halaman_laporan_inventory')->name('HalamanLaporan.Inventory');
+            Route::any('/data-laporan-inventory', 'data_laporan_inventory')->name('DataLaporanInventory');
+            Route::post('/cetak-laporan-inventory', 'cetak_laporan_inventory')->name('CetakLaporanInventory');
+
+            Route::get('/laporan-pembayaran', 'halaman_laporan_pembayaran')->name('HalamanLaporan.Pembayaran');
+            Route::any('/data-laporan-pembayaran', 'data_laporan_pembayaran')->name('DataLaporanPembayaran');
+            Route::post('/cetak-laporan-pembayaran', 'cetak_laporan_pembayaran')->name('CetakLaporanPembayaran');
+        });
     });
 
     Route::prefix('customer')->name('customer.')->middleware(['isCustomer'])->group(function () {
         Route::post('/tambah-ke-keranjang', [ProdukController::class, 'tambah_ke_keranjang'])->name('TambahKeKeranjang');
+
+        Route::controller(ProfilController::class)->group(function (){
+            Route::get('/profil', 'profil')->name('HalamanProfil');
+        });
 
         Route::controller(KeranjangController::class)->group(function (){
             Route::get('/keranjang', 'keranjang')->name('HalamanKeranjang');
@@ -105,8 +142,17 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::controller(PembayaranController::class)->group(function (){
-            Route::get('/pembayaran', 'pembayaran')->name('HalamanPembayaran');
-            Route::post('/cek-ongkir', 'cek_ongkir');
+            Route::get('/buat_pesanan', 'buat_pesanan')->name('HalamanBuatPesanan');
+            Route::post('/cek-data-ongkir', 'cek_data_ongkir');
+            Route::post('/proses-buat-pesanan', 'proses_buat_pesanan')->name('ProsesBuatPesanan');
+            Route::get('/bayar-pesanan/{pesanan_id}', 'bayar_pesanan')->name('HalamanBayarPesanan');
+            Route::post('/upload-bukti-pembayaran/{pesanan_id}', 'upload_bukti_pembayaran')->name('UploadBuktiPembayaran');
+        });
+
+        Route::controller(PesananController::class)->group(function (){
+            Route::post('/konfirmasi-pesanan', 'konfirmasi_pesanan')->name('KonfirmasiPesananDiterima');
+            Route::post('/beri-penilaian', 'beri_peninlaian_produk_pesanan')->name('BeriPenilaianProdukPesanan');
+            Route::post('/batalkan-pesanan-oleh-pelanggan', 'batalkan_pesanan_oleh_pelanggan')->name('BatalkanPesananOlehPelanggan');
         });
     });
 

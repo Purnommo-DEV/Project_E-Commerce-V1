@@ -1,5 +1,6 @@
 <!-- Plugins JS File -->
 <script src="{{ asset('Front/assets/js/jquery.min.js') }}"></script>
+<script src="{{ asset('Front/assets/js/jquery.colorbox.js') }}"></script>
 <script src="{{ asset('Front/assets/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('Front/assets/js/jquery.hoverIntent.min.js') }}"></script>
 <script src="{{ asset('Front/assets/js/jquery.waypoints.min.js') }}"></script>
@@ -9,7 +10,10 @@
 <script src="{{ asset('Front/assets/js/jquery.magnific-popup.min.js') }}"></script>
 <script src="{{ asset('Front/assets/js/jquery.plugin.min.js') }}"></script>
 <script src="{{ asset('Front/assets/js/jquery.countdown.min.js') }}"></script>
-
+<script src="{{ asset('Front/assets/js/jquery.elevateZoom.min.js') }}"></script>
+<script src="{{ asset('Front/assets/js/jquery.sticky-kit.min.js') }}"></script>
+<script src="{{ asset('Back/assets/vendors/form/jquery.form.min.js') }}"></script>
+<script src="{{ asset('Back/assets/vendors/validate/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('Back/assets/vendors/sweetalert/sweetalert.min.js') }}"></script>
 <script src="{{ asset('Back/assets/vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
 <!-- Main JS File -->
@@ -18,6 +22,28 @@
 
 {{-- User Registrasi --}}
 <script>
+    $(document).ready(function() {
+        //Examples of how to assign the Colorbox event to elements
+        $(".group1").colorbox({
+            rel: "group1"
+        });
+        //Example of preserving a JavaScript event for inline calls.
+        $("#click").click(function() {
+            var maxHeight = $(window).height() - 30 + "px";
+            $("#click")
+                .css({
+                    "max-height": maxHeight,
+                    "background-color": "#f00",
+                    color: "#fff",
+                    cursor: "inherit",
+                })
+                .text(
+                    "Open this window again and this message will still be here."
+                );
+            return false;
+        });
+    });
+
     $('#form-register-user').on('submit', function(e) {
         e.preventDefault();
         $.ajax({
@@ -37,12 +63,22 @@
                         // $('span.'+prefix+'_error').text(val[0]);
                     });
                 } else if (data.status == 1) {
-                    swal({
-                            title: "Berhasil",
-                            text: `${data.msg}`,
-                            icon: "success",
-                            buttons: true,
-                            successMode: true,
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal
+                                .stopTimer)
+                            toast.addEventListener('mouseleave', Swal
+                                .resumeTimer)
+                        }
+                    })
+                    Toast.fire({
+                            icon: 'success',
+                            title: data.msg
                         }),
                         setTimeout(function() {
                             window.location.href = `${data.route}`;
@@ -108,7 +144,6 @@
     });
 </script>
 
-
 {{-- Tampilkan Password --}}
 <script>
     function password_login_show() {
@@ -127,6 +162,7 @@
         }
     }
 </script>
+
 {{-- Pilih Provinsi dan Kota --}}
 <script>
     $(document).ready(function() {

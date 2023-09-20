@@ -1,121 +1,13 @@
 @extends('Front.layout.master', ['title' => 'Keranjang Belanja'])
 @section('konten')
-    <div id="gabung_isi_keranjang">
-        <div class="page-content">
-            <div class="cart">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-9">
-                            <table class="table table-cart table-mobile">
-                                <thead>
-                                    <tr>
-                                        <th>Nama Produk</th>
-                                        <th>Harga</th>
-                                        <th>Kuantitas</th>
-                                        <th>Total</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @php
-                                        $total = 0;
-                                        $sub_total = 0;
-                                    @endphp
-                                    @foreach ($data_keranjang as $keranjang)
-                                        <tr>
-                                            <td class="product-col">
-                                                <div class="product">
-                                                    @php
-                                                        $gambar_produk = \App\Models\ProdukGambar::where('produk_id', $keranjang->relasi_produk->id)
-                                                            ->select(['produk_id', 'path'])
-                                                            ->first();
-                                                    @endphp
-                                                    <figure class="product-media">
-                                                        <a href="#">
-                                                            <img class="object-fit-fill border rounded"
-                                                                style="aspect-ratio: 4/3;"
-                                                                src="{{ asset('storage/' . $gambar_produk->path) }}"
-                                                                alt="Product image">
-                                                        </a>
-                                                    </figure>
-
-                                                    <h4 class="product-title">
-                                                        <a href="#!">{{ $keranjang->relasi_produk->nama_produk }}<br>
-                                                            @if ($keranjang->relasi_produk->produk_tipe_id == 2)
-                                                                (Variasi :
-                                                                {{ $keranjang->relasi_produk_detail->produk_variasi }})
-                                                            @endif
-                                                        </a>
-                                                    </h4><!-- End .product-title -->
-                                                </div><!-- End .product -->
-                                            </td>
-                                            <td class="price-col">@currency($keranjang->relasi_produk_detail->harga)</td>
-                                            <td class="quantity-col">
-                                                <div class="cart-product-quantity">
-                                                    <div class="d-flex flex-row align-items-center qty">
-                                                        <button
-                                                            class="btn btn-decrement btn-warning btn-sm btn-spinner btnItemUpdate qtyMinus"
-                                                            type="button" data-cartid="{{ $keranjang['id'] }}"
-                                                            style="border-radius: 6px;max-width: 20px;"><i
-                                                                class="icon-minus"></i></button>
-                                                        <input type="text" name="kuantitas" id="appendedInputButtons"
-                                                            value="{{ $keranjang['kuantitas'] }}" pattern="[0-9]*"
-                                                            class="form-control kuantitas-input"
-                                                            style="text-align: center; border-radius: 6px;">
-                                                        <button
-                                                            class="btn btn-increment btn-primary btn-sm btn-spinner btnItemUpdate qtyPlus"
-                                                            type="button" data-cartid="{{ $keranjang['id'] }}"
-                                                            style="border-radius: 6px;max-width: 20px;"><i
-                                                                class="icon-plus"></i></button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            @php
-                                                $total = $keranjang->relasi_produk_detail->harga * $keranjang->kuantitas;
-                                                $sub_total = $sub_total + $keranjang->relasi_produk_detail->harga * $keranjang->kuantitas;
-                                            @endphp
-                                            <td class="price-col">@currency($total)</td>
-                                            <td class="remove-col">
-                                                <button
-                                                    class="btn btn-increment btn-danger btn-sm btn-spinner btnItemDelete"
-                                                    type="button" data-cartid="{{ $keranjang['id'] }}"
-                                                    style="border-radius: 6px;max-width: 20px;"><i
-                                                        class="icon-close"></i></button>
-                                                {{-- <button class="btn btnItemDelete" type="button"
-                                                    data-cartid="{{ $keranjang->id }}"><i class="icon-close"></i></button> --}}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table><!-- End .table table-wishlist -->
-                        </div><!-- End .col-lg-9 -->
-                        <aside class="col-lg-3">
-                            <div class="summary summary-cart">
-                                <h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
-
-                                <table class="table table-summary">
-                                    <tbody>
-                                        <tr class="summary-total" style="color:black;">
-                                            <td>Total:</td>
-                                            <td>@currency($sub_total)</td>
-                                        </tr><!-- End .summary-total -->
-                                    </tbody>
-                                </table><!-- End .table table-summary -->
-
-                                <a href="{{ route('customer.HalamanPembayaran') }}"
-                                    class="btn btn-outline-primary-2 btn-order btn-block">Lanjutkan Ke
-                                    Pembayaran</a>
-                            </div><!-- End .summary -->
-
-                            <a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>Lanjutkan
-                                    Belanja</span><i class="icon-refresh"></i></a>
-                        </aside><!-- End .col-lg-3 -->
-                    </div><!-- End .row -->
+    <div class="page-content">
+        <div class="cart">
+            <div class="container">
+                <div id="gabung_isi_keranjang">
+                    @include('Front.keranjang._data_keranjang')
                 </div><!-- End .container -->
-            </div><!-- End .cart -->
-        </div><!-- End .page-content -->
-
+            </div><!-- End .page-content -->
+        </div><!-- End .cart -->
     </div>
 @endsection
 @section('script')
@@ -212,6 +104,7 @@
             });
         });
 
+
         $(document).on('click', '.btnItemDelete', function(event) {
             const id = $(event.currentTarget).attr('id-produk');
             var cartid = $(this).data('cartid');
@@ -219,9 +112,9 @@
                 title: 'Yakin ingin mengahpus data ini?',
                 icon: 'warning',
                 showDenyButton: true,
-            }).then((willDelete) => {
+            }).then(function(result) {
 
-                if (willDelete) {
+                if (result.value) {
                     $.ajax({
                         data: {
                             "keranjang_id": cartid,
@@ -246,19 +139,30 @@
                                     }
                                 })
                                 Toast.fire({
-                                        icon: 'success',
-                                        title: data.msg
-                                    }),
-                                    $("#gabung_isi_keranjang").load(location.href +
-                                        " #gabung_isi_keranjang>*", "");
+                                    icon: 'success',
+                                    title: data.msg
+                                });
+                                // Jika " #gabung_isi_keranjang>*" halaman tidak akan bertimpa (ada spasi sebelum #)
+                                // Jika "#gabung_isi_keranjang>*" halamana akan bertimpa (tidak ada spasi sebelum #)
+
+                                $("#gabung_isi_keranjang").load(location.href +
+                                    " #gabung_isi_keranjang>*", "");
                                 $('.total_produk_keranjang_class').html(data
-                                    .total_produk_keranjang)
+                                    .total_produk_keranjang);
+                                $("#data_keranjang_header").html(data.data_keranjang_terbaru);
+                                $(".cart-total-price").html(data
+                                    .total_harga_produk_dlm_keranjang);
+
+
                             }
                         }
                     });
                 } else {
-                    //alert ('no');
-                    return false;
+                    Swal.fire(
+                        "Cancel!",
+                        "Your file has been cancel deleted.",
+                        "failed"
+                    )
                 }
             });
         });
