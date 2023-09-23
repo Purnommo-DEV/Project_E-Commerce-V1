@@ -6545,7 +6545,7 @@ p {
     margin-bottom: 1.3rem;
 }
 .new-price {
-    color: black;
+    color: #c96;
     margin-right: 0.8rem;
 }
 .old-price {
@@ -16398,7 +16398,7 @@ button:focus {
     display: flex;
     align-items: center;
     font-size: 1.3rem;
-    margin-bottom: 1.7rem;
+    margin-bottom: 1%;
     line-height: 1;
     white-space: nowrap;
 }

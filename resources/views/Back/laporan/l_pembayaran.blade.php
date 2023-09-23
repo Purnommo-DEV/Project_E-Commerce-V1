@@ -174,7 +174,7 @@
                             daftar_data_pembayaran[row.id] = row;
                             let total_pendapatan_bersih = row.alias_total_pendapatan_kotor - row
                                 .alias_total_ongkir;
-                            return `${row.metode_pembayaran} (Transfer Bank)`
+                            return `${row.metode_pembayaran}`
                         }
                     },
                 ]

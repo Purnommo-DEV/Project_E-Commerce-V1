@@ -5,32 +5,25 @@
             <div class="row">
                 <div class="col-lg-9">
                     <div class="toolbox">
-                        <div class="toolbox-left">
+                        {{-- <div class="toolbox-left">
                             <div class="toolbox-info">
                                 Showing <span>9 of 56</span> Products
                             </div><!-- End .toolbox-info -->
-                        </div><!-- End .toolbox-left -->
+                        </div><!-- End .toolbox-left --> --}}
 
                         <div class="toolbox-right">
-                            <form name="urutanProduk" id="urutanProduk" method="get"
-                                action="{{ route('KategoriDetail', $kategori->slug) }}">
+                            <form name="urutanProduk" id="urutanProduk">
                                 <div class="toolbox-sort">
                                     <label for="sortby">Urutkan Berdasarkan :</label>
                                     <div class="select-custom">
                                         <select name="urutan" id="urutan" class="form-control">
-                                            <option value="">Pilih</option>
-                                            <option value="produk_terbaru"
-                                                @if (isset($_GET['urutan']) && $_GET['urutan'] == '') selected="" @endif>Semua</option>
+                                            <option value="" selected disabled>Pilih</option>
+                                            <option value="" @if (isset($_GET['urutan']) && $_GET['urutan'] == '') selected="" @endif>
+                                                Semua</option>
                                             <option value="produk_terbaru"
                                                 @if (isset($_GET['urutan']) && $_GET['urutan'] == 'produk_terbaru') selected="" @endif>Produk Terbaru</option>
                                             <option value="produk_a_z" @if (isset($_GET['urutan']) && $_GET['urutan'] == 'produk_a_z') selected="" @endif>
                                                 Produk A-Z</option>
-                                            <option value="produk_harga_rendah"
-                                                @if (isset($_GET['urutan']) && $_GET['urutan'] == 'produk_harga_rendah') selected="" @endif>Produk Harga Terendah
-                                            </option>
-                                            <option
-                                                value="produk_harga_tinggi"@if (isset($_GET['urutan']) && $_GET['urutan'] == 'produk_harga_tinggi') selected="" @endif>
-                                                Produk Harga Tertinggi</option>
                                         </select>
                                     </div>
                                 </div>
@@ -63,7 +56,7 @@
                         </ul>
                     </nav> --}}
                 </div><!-- End .col-lg-9 -->
-                <aside class="col-lg-3 order-lg-first">
+                <aside class="col-lg-3 order-lg-first </div>">
                     <div class="sidebar sidebar-shop">
                         <div class="widget widget-clean">
                             <label>Filters:</label>
@@ -156,28 +149,6 @@
                                 </div><!-- End .widget-body -->
                             </div><!-- End .collapse -->
                         </div><!-- End .widget -->
-
-                        <div class="widget widget-collapsible">
-                            <h3 class="widget-title">
-                                <a data-toggle="collapse" href="#widget-5" role="button" aria-expanded="true"
-                                    aria-controls="widget-5">
-                                    Price
-                                </a>
-                            </h3><!-- End .widget-title -->
-
-                            <div class="collapse show" id="widget-5">
-                                <div class="widget-body">
-                                    <div class="filter-price">
-                                        <div class="filter-price-text">
-                                            Price Range:
-                                            <span id="filter-price-range"></span>
-                                        </div><!-- End .filter-price-text -->
-
-                                        <div id="price-slider"></div><!-- End #price-slider -->
-                                    </div><!-- End .filter-price -->
-                                </div><!-- End .widget-body -->
-                            </div><!-- End .collapse -->
-                        </div><!-- End .widget -->
                     </div><!-- End .sidebar sidebar-shop -->
                 </aside><!-- End .col-lg-3 -->
             </div><!-- End .row -->
@@ -188,12 +159,14 @@
     <script>
         $("#urutan").on('change', function() {
             var urutan = $(this).val();
+            var kategori_slug = @json($kategori);
             $.ajax({
                 method: "get",
                 dataType: 'html',
                 url: "{{ route('FilterUrtukan') }}",
                 data: {
-                    urutan: urutan
+                    req_urutan: urutan,
+                    req_kategori_slug: kategori_slug.slug
                 },
                 success: function(data) {
                     $('#daftar-produk').html(data);

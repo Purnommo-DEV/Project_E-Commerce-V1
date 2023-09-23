@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Front;
 
 use App\Models\Produk;
 use App\Models\Keranjang;
+use App\Models\Penilaian;
 use App\Models\ProdukDetail;
 use App\Models\ProdukGambar;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\PesananDetail;
+use App\Models\PesananStatus;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,7 +21,11 @@ class ProdukController extends Controller
         $produk_gambar = ProdukGambar::where('produk_id', $produk->id)->get();
         $produk_biasa = ProdukDetail::where('produk_id', $produk->id)->first();
         $produk_variasi = ProdukDetail::where('produk_id', $produk->id)->get();
-        return view('Front.produk_detail.produk_detail', compact('produk', 'produk_gambar', 'produk_variasi', 'produk_biasa'));
+        $rating_produk = Penilaian::with('relasi_pesanan_detail')->whereRelation('relasi_pesanan_detail', 'produk_id', $produk->id)->first();
+        $jumlah_penilaian_produk = Penilaian::with('relasi_pesanan_detail')->whereRelation('relasi_pesanan_detail', 'produk_id', $produk->id)->count();
+        $jumlah_produk_terjual = PesananDetail::whereRelation('relasi_pesanan.relasi_pesanan_status', 'status_pesanan_id', 6)->where('produk_id', $produk->id)->count();
+        $penilaian_produk = Penilaian::with('relasi_pesanan_detail.relasi_pesanan.relasi_user')->whereRelation('relasi_pesanan_detail', 'produk_id', $produk->id)->get();;
+        return view('Front.produk_detail.produk_detail', compact('produk', 'produk_gambar', 'produk_variasi', 'produk_biasa', 'rating_produk', 'jumlah_penilaian_produk', 'jumlah_produk_terjual', 'penilaian_produk'));
     }
 
     public function resp_produk_variasi(Request $request){

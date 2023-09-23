@@ -4,7 +4,7 @@
 }
 .header.header-7 .logo {
     margin-top: 1.7rem;
-    margin-bottom: 1.7rem;
+    margin-bottom: 0.5rem;
     display: flex;
     align-items: center;
 }
@@ -417,7 +417,7 @@
 
 /* NEW CSS PRODUK */
 .font-size-normal {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
 }
 .letter-spacing-normal {
     letter-spacing: 0.01em;
@@ -495,7 +495,7 @@
     content: "";
     height: 4px;
     width: 100%;
-    background-color: #61ab00;
+    background-color: #c96;
 }
 .product-countdown {
     border-radius: 0.2rem;
@@ -554,6 +554,7 @@
 
 .product-media > a img {
     padding: 1rem;
+    object-fit: cover;
     border-radius: 1.4rem;
 }
 
@@ -928,7 +929,7 @@
     color: #999;
 }
 .category-title:hover {
-    color: #61ab00;
+    color: #c96;
 }
 
 /* NEW CSS MEDIA PRODUK */

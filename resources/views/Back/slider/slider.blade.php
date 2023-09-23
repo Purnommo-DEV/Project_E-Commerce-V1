@@ -62,7 +62,6 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Judul</th>
-                                    <th>Sub Judul</th>
                                     <th>Gambar</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -175,19 +174,11 @@
                     "class": "text-wrap text-center",
                     "render": function(data, type, row, meta) {
                         daftar_data_slider[row.id] = row;
-                        return row.subjudul;
-                    }
-                },
-                {
-                    "targets": 3,
-                    "class": "text-wrap text-center",
-                    "render": function(data, type, row, meta) {
-                        daftar_data_slider[row.id] = row;
                         return `<img src="/storage/${row.gambar}" width="100">`
                     }
                 },
                 {
-                    "targets": 4,
+                    "targets": 3,
                     "class": "text-nowrap text-center",
                     "render": function(data, type, row, meta) {
                         let tampilan;

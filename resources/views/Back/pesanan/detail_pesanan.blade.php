@@ -10,42 +10,6 @@
                             <h4 class="fw-bold">Order {{ $pesanan->kode_pesanan }}</h4>
                             <p class="mb-0">Customer ID : <a href="javascript:;">{{ $pesanan->relasi_user->id }}</a></p>
                         </div>
-                        <div class="overflow-auto">
-                            <div class="btn-group position-static">
-                                <div class="btn-group position-static">
-                                    <button type="button" class="btn btn-outline-primary px-4">
-                                        <i class="bi bi-printer-fill me-2"></i>Print
-                                    </button>
-                                </div>
-                                <div class="btn-group position-static">
-                                    <button type="button" class="btn btn-outline-primary px-4">
-                                        <i class="bi bi-arrow-clockwise me-2"></i>Refund
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="javascript:;">Action</a></li>
-                                        <li><a class="dropdown-item" href="javascript:;">Another action</a></li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Something else here</a></li>
-                                    </ul>
-                                </div>
-                                <div class="btn-group position-static">
-                                    <button type="button" class="btn btn-outline-primary dropdown-toggle px-4"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        More Actions
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="javascript:;">Action</a></li>
-                                        <li><a class="dropdown-item" href="javascript:;">Another action</a></li>
-                                        <li>
-                                            <hr class="dropdown-divider">
-                                        </li>
-                                        <li><a class="dropdown-item" href="javascript:;">Something else here</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -247,7 +211,9 @@
                                                         class="form-control" required>
                                                         <option value="#" selected disabled> -- Pilih Status --
                                                         </option>
-                                                        @if ($pesanan_status->status_pesanan_id == '3')
+                                                        @if ($pesanan_status->status_pesanan_id == '10')
+                                                            <option value="4">Dikemas</option>
+                                                        @elseif ($pesanan_status->status_pesanan_id == '3')
                                                             <option value="4">Dikemas</option>
                                                         @elseif ($pesanan_status->status_pesanan_id == '4')
                                                             <option value="5">Dikirim</option>

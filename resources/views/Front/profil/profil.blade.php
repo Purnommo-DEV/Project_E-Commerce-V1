@@ -38,17 +38,20 @@
                     <div class="heading heading-flex heading-border mb-3"
                         style="box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2);">
 
-                        <div class="heading-left">
+                        <div class="heading-left ">
                             <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#belum-bayar-tab"
                                         role="tab">Belum Bayar</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#dibayar-tab" role="tab">Telah Bayar</a>
+                                </li>
+                                {{-- <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#menunggu-verifikasi-tab"
                                         role="tab">Menunggu
                                         Verifikasi</a>
-                                </li>
+                                </li> --}}
                                 <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#sedang-dikemas-tab" role="tab">Sedang
                                         Dikemas</a>
@@ -69,7 +72,8 @@
 
                     <div class="tab-content">
                         @include('Front.profil._belum_bayar')
-                        @include('Front.profil._menunggu_verifikasi')
+                        @include('Front.profil._dibayar')
+                        {{-- @include('Front.profil._menunggu_verifikasi') --}}
                         @include('Front.profil._sedang_dikemas')
                         @include('Front.profil._dikirim')
                         @include('Front.profil._selesai')

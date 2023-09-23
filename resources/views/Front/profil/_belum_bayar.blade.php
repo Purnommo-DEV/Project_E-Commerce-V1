@@ -1,101 +1,102 @@
 <div class="tab-pane p-0 fade show active" id="belum-bayar-tab" role="tabpanel">
     <div class="product-group mb-lg-7 mb-4">
         <div class="col">
-            @forelse ($pesanan as $data_pesanan)
-                @if ($data_pesanan->relasi_pesanan_status->status_pesanan_id == 1)
-                    <div class="products d-flex flex-column justify-content-between bg-white mt-2 mb-2 mt-xl-0">
-                        @php
-                            $pesanan_detail = \App\Models\PesananDetail::with(['relasi_produk.relasi_gambar', 'relasi_produk_detail.relasi_produk.relasi_kategori'])
-                                ->where('pesanan_id', $data_pesanan->id)
-                                ->get();
-                        @endphp
-                        @foreach ($pesanan_detail as $data_pesanan_detail)
-                            <div class="product d-flex flex-row overflow-hidden mb-0 p-0 shadow-none">
-                                <figure
-                                    class="mb-0 product-media bg-white d-flex justify-content-center align-items-center"
-                                    style="width:15%;">
-                                    <a
-                                        href="{{ route('HalamanDetailProduk', $data_pesanan_detail->relasi_produk->slug) }}">
-                                        <img src="{{ asset('storage/' . $data_pesanan_detail->relasi_produk->relasi_gambar->path) }}"
-                                            alt="Product image" class="product-image" style="aspect-ratio: 1/1;" />
+            @forelse ($pesanan_belum_bayar as $data_pesanan)
+                {{-- @if ($data_pesanan->relasi_pesanan_status->status_pesanan_id == 1) --}}
+                <div class="products d-flex flex-column justify-content-between bg-white mt-2 mb-2 mt-xl-0">
+                    @php
+                        $pesanan_detail = \App\Models\PesananDetail::with(['relasi_produk.relasi_gambar', 'relasi_produk_detail.relasi_produk.relasi_kategori'])
+                            ->where('pesanan_id', $data_pesanan->id)
+                            ->get();
+                    @endphp
+                    @foreach ($pesanan_detail as $data_pesanan_detail)
+                        <div class="product d-flex flex-row overflow-hidden mb-0 p-0 shadow-none">
+                            <figure class="mb-0 product-media bg-white d-flex justify-content-center align-items-center"
+                                style="width:15%;">
+                                <a href="{{ route('HalamanDetailProduk', $data_pesanan_detail->relasi_produk->slug) }}">
+                                    <img src="{{ asset('storage/' . $data_pesanan_detail->relasi_produk->relasi_gambar->path) }}"
+                                        alt="Product image" class="product-image" style="aspect-ratio: 1/1;" />
+                                </a>
+                            </figure>
+                            <!-- End .product-media bg-white d-flex justify-content-center align-items-center -->
+
+                            <div class="product-body">
+                                <div class="product-cat text-left">
+                                    <a href="#!">{{ $data_pesanan_detail->relasi_produk_detail->relasi_produk->relasi_kategori->nama_kategori }}
                                     </a>
-                                </figure>
-                                <!-- End .product-media bg-white d-flex justify-content-center align-items-center -->
-
-                                <div class="product-body">
-                                    <div class="product-cat text-left">
-                                        <a href="#!">{{ $data_pesanan_detail->relasi_produk_detail->relasi_produk->relasi_kategori->nama_kategori }}
-                                        </a>
-                                    </div>
-                                    <!-- End .product-cat  -->
-                                    <h3 class="product-title letter-spacing-normal font-size-normal text-left mb-0">
-                                        <a
-                                            href="{{ route('HalamanDetailProduk', $data_pesanan_detail->relasi_produk->slug) }}">{{ $data_pesanan_detail->relasi_produk_detail->relasi_produk->nama_produk }}</a>
-                                    </h3>
-                                    @if ($data_pesanan_detail->relasi_produk->produk_tipe_id == 2)
-                                        <h3 class="product-title letter-spacing-normal font-size-normal text-left mb-0">
-                                            <a
-                                                href="{{ route('HalamanDetailProduk', $data_pesanan_detail->relasi_produk->slug) }}">Variasi
-                                                :
-                                                {{ $data_pesanan_detail->relasi_produk_detail->produk_variasi }}</a>
-                                        </h3>
-                                    @endif
-                                    <h3 class="product-title letter-spacing-normal font-size-normal text-left mb-0">
-                                        <a
-                                            href="{{ route('HalamanDetailProduk', $data_pesanan_detail->relasi_produk->slug) }}">x
-                                            {{ $data_pesanan_detail->kuantitas }}</a>
-                                    </h3>
-                                    <!-- End .product-title letter-spacing-normal font-size-normal -->
-                                    <div class="product-price mb-1 mt-1 text-dark">{!! help_format_rupiah($data_pesanan_detail->relasi_produk_detail->harga) !!}
-                                    </div>
                                 </div>
-                                <!-- End .product-body -->
-                            </div>
-                            <div class="p-1 w-100"
-                                style="background-color:#d9d9d9!important; padding: 0.01rem!important;">
-                            </div>
-                        @endforeach
-
-                        <div class="p-1 w-100" style="background-color:#d9d9d9!important; padding: 0.01rem!important;">
-                        </div>
-                        <div class="d-flex bd-highlight">
-                            <div class="mt-1 mb-1 bd-highlight">
-                                <h3 class="font-size-normal text-left mb-0"
-                                    style="padding-left: 1rem; color:black; font-size: 1.3rem;">
-                                    Jumlah harus dibayar :
-                                    <b style="color:#c96;">{!! help_format_rupiah($data_pesanan->total_pembayaran) !!}</b> (
-                                    {{ $pesanan_detail->count() }} Produk)
+                                <!-- End .product-cat  -->
+                                <h3 class="product-title letter-spacing-normal font-size-normal text-left mb-0">
+                                    <a
+                                        href="{{ route('HalamanDetailProduk', $data_pesanan_detail->relasi_produk->slug) }}">{{ $data_pesanan_detail->relasi_produk_detail->relasi_produk->nama_produk }}</a>
                                 </h3>
+                                @if ($data_pesanan_detail->relasi_produk->produk_tipe_id == 2)
+                                    <h3 class="product-title letter-spacing-normal font-size-normal text-left mb-0">
+                                        <a
+                                            href="{{ route('HalamanDetailProduk', $data_pesanan_detail->relasi_produk->slug) }}">Variasi
+                                            :
+                                            {{ $data_pesanan_detail->relasi_produk_detail->produk_variasi }}</a>
+                                    </h3>
+                                @endif
+                                <h3 class="product-title letter-spacing-normal font-size-normal text-left mb-0">
+                                    <a
+                                        href="{{ route('HalamanDetailProduk', $data_pesanan_detail->relasi_produk->slug) }}">x
+                                        {{ $data_pesanan_detail->kuantitas }}</a>
+                                </h3>
+                                <!-- End .product-title letter-spacing-normal font-size-normal -->
+                                <div class="product-price mb-1 mt-1 text-dark">{!! help_format_rupiah($data_pesanan_detail->relasi_produk_detail->harga) !!}
+                                </div>
                             </div>
+                            <!-- End .product-body -->
                         </div>
                         <div class="p-1 w-100" style="background-color:#d9d9d9!important; padding: 0.01rem!important;">
                         </div>
-                        <div class="d-flex align-items-start flex-column bd-highlight">
-                            <div class="mt-1 mb-1 bd-highlight"><a href="#!"
-                                    style="padding-left: 1rem; color:black; font-weight: 400; font-size: 1rem;"> Bayar
-                                    Sebelum
-                                    {!! help_tanggal_jam($data_pesanan->expired_date) !!}
-                                </a>
-                            </div>
-                        </div>
-                        <div class="row" style="padding:1rem;">
-                            <div class="col p-1">
-                                <a class="btn btn-sm btn-primary btn-block mb-0"
-                                    href="{{ route('customer.HalamanBayarPesanan', $data_pesanan->id) }}">Bayar
-                                    Sekarang</a>
-                            </div>
-                            <div class="col p-1">
-                                <a class="btn btn-sm btn-danger btn-block mb-0 btn-batalkan-pesanan" href="#!"
-                                    pesanan-id="{{ $data_pesanan->id }}">Batalkan
-                                    Pesanan
-                                </a>
-                                @include('Front.profil.modal._form_pembatalan_pesanan')
-                            </div>
+                    @endforeach
+
+                    <div class="p-1 w-100" style="background-color:#d9d9d9!important; padding: 0.01rem!important;">
+                    </div>
+                    <div class="d-flex bd-highlight">
+                        <div class="mt-1 mb-1 bd-highlight">
+                            <h3 class="font-size-normal text-left mb-0"
+                                style="padding-left: 1rem; color:black; font-size: 1.3rem;">
+                                Jumlah harus dibayar :
+                                <b style="color:#c96;">{!! help_format_rupiah($data_pesanan->total_pembayaran) !!}</b> (
+                                {{ $pesanan_detail->count() }} Produk)
+                            </h3>
                         </div>
                     </div>
-                @endif
+                    <div class="p-1 w-100" style="background-color:#d9d9d9!important; padding: 0.01rem!important;">
+                    </div>
+                    <div class="d-flex align-items-start flex-column bd-highlight">
+                        <div class="mt-1 mb-1 bd-highlight"><a href="#!"
+                                style="padding-left: 1rem; color:black; font-weight: 400; font-size: 1rem;"> Bayar
+                                Sebelum
+                                {!! help_tanggal_jam($data_pesanan->expired_date) !!}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row" style="padding:1rem;">
+                        <div class="col p-1">
+                            <a class="btn btn-sm btn-primary btn-block mb-0"
+                                href="{{ route('customer.HalamanBayarPesanan', $data_pesanan->id) }}">Bayar
+                                Sekarang</a>
+                        </div>
+                        <div class="col p-1">
+                            <a class="btn btn-sm btn-danger btn-block mb-0 btn-batalkan-pesanan" href="#!"
+                                pesanan-id="{{ $data_pesanan->id }}">Batalkan
+                                Pesanan
+                            </a>
+                            @include('Front.profil.modal._form_pembatalan_pesanan')
+                        </div>
+                    </div>
+                </div>
+                {{-- @endif --}}
             @empty
-                <label> Belum ada Pesanan</label>
+                <div class="element mb-2" style="border: none;">
+                    <img src="{{ asset('Front/assets/images/empty-order.png') }}" alt=""
+                        style="max-width: 15%;">
+                    <h6>Belum memiliki Pesanan</h6>
+                </div>
             @endforelse
         </div>
     </div>

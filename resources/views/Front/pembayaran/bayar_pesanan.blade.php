@@ -108,11 +108,16 @@
                                 @if ($pesanan_status->status_pesanan_id == 1)
                                     <tr>
                                         <td style="padding-top:3%; padding-bottom:3%; padding-left: 0.6rem; padding-right: 1rem;"
-                                            colspan="2"> <a href="#!" data-toggle="modal"
+                                            colspan="2">
+                                            {{-- <a href="#!" data-toggle="modal"
                                                 data-target="#modal-upload-bukti-bayar"
                                                 class="btn btn-outline-primary btn-sm"
                                                 style="color: #c96; border-color:#c96; font-size: 1rem;">Upload Bukti
-                                                Pembayaran</a></td>
+                                                Pembayaran</a> --}}
+                                            <button class="btn btn-outline-primary btn-sm"
+                                                style="color: #c96; border-color:#c96; font-size: 1rem;"
+                                                id="pay-button">Bayar Sekarang</button>
+                                        </td>
 
                                     </tr>
                                 @else
@@ -288,6 +293,49 @@
 @endsection
 @section('script')
     <script>
+        var payButton = document.getElementById('pay-button');
+        payButton.addEventListener('click', function() {
+            window.snap.pay('{{ $snap_token }}', {
+                onSuccess: function(result) {
+                    /* You may add your own implementation here */
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal
+                                .stopTimer)
+                            toast.addEventListener('mouseleave', Swal
+                                .resumeTimer)
+                        }
+                    })
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: "Pembayaran Berhasil"
+                    })
+                    window.location.href = "{{ route('customer.HalamanProfil') }}";
+                    console.log(result);
+                },
+                onPending: function(result) {
+                    /* You may add your own implementation here */
+                    alert("wating your payment!");
+                    console.log(result);
+                },
+                onError: function(result) {
+                    /* You may add your own implementation here */
+                    alert("payment failed!");
+                    console.log(result);
+                },
+                onClose: function() {
+                    /* You may add your own implementation here */
+                    alert('you closed the popup without finishing the payment');
+                }
+            })
+        });
+
         var ekspedisi_layanan = @json($pesanan->ekspedisi_layanan);
 
         $('#ekspedisi').html(ekspedisi_layanan.split("_")[0])
@@ -332,7 +380,7 @@
                         })
 
                         // $("#div-status-pesanan").load(location.href +
-                        //     " #div-status-pesanan>*", "");
+                        // " #div-status-pesanan>*", "");
 
                         location.reload();
 

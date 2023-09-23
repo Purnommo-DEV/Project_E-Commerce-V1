@@ -25,6 +25,9 @@
         href="{{ asset('Front/assets/vendor/line-awesome/line-awesome/line-awesome/css/line-awesome.min.css') }}" />
     <!-- Plugins CSS File -->
 
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="SB-Mid-client-Woe8A8SQOaMFxZwr"></script>
+
     <link rel="stylesheet" href="{{ asset('Front/assets/css/bootstrap.min.css') }}" />
 
     <link rel="stylesheet" href="{{ asset('Front/assets/css/plugins/owl-carousel/owl.carousel.css') }}" />

@@ -152,14 +152,14 @@
                                                 </div>
                                             </th>
                                         </tr>
-                                        <tr class="summary-shipping">
+                                        {{-- <tr class="summary-shipping">
                                             <th
                                                 style="padding-bottom: 0px; border-bottom: none; color: black; padding-left: 2rem; padding-right: 2rem;">
                                                 <b>Metode
                                                     Pembayaran :</b>
                                             </th>
-                                        </tr>
-                                        <tr>
+                                        </tr> --}}
+                                        {{-- <tr>
                                             <td
                                                 style="padding-bottom: 0px; padding-top: 0px; padding-left: 2rem; padding-right: 2rem;">
                                                 <div class="custom-control custom-radio">
@@ -171,7 +171,7 @@
                                                 </div>
                                             </td>
                                             <td>&nbsp;</td>
-                                        </tr>
+                                        </tr> --}}
 
                                         <tr class="summary-subtotal" style="font-size: 1.3rem;">
                                             <th style="color: black; padding-left: 2rem; padding-right: 2rem;"><b>Total
@@ -187,8 +187,8 @@
                                                 style="color: black; padding-left: 2rem; padding-right: 2rem;">
                                                 <button type="submit"
                                                     class="btn btn-outline-primary btn-block mb-3 tombols"
-                                                    style="color: #c96; border-color:#c96; border-radius:1rem;"><span>Buat
-                                                        Pesanan</span></button>
+                                                    style="color: #c96; border-color:#c96; border-radius:1rem;"><span>Lanjut
+                                                        Pembayaran</span></button>
                                             </th>
                                         </tr>
                                     </tbody>
@@ -214,7 +214,6 @@
 
         $('select[name="req_kurir"]').on('change', function() {
             let kurir = $(this).val();
-
             if (kurir) {
                 jQuery.ajax({
                     headers: {
@@ -226,7 +225,8 @@
                         // Berat paket maksimal 30Kg, jika paket melebihi 30Kg maka akan error RajaOngkir BadRequest
                         // Jika salah satu data tidak cocok maka dapat terjadi error RajaOngkir BadRequest
                         // Jika salah satu kolom kosong maka dapat terjadi error RajaOngkir BadRequest
-                        'kota_customer_id': 364,
+                        // Jika Kota Tujuan berbeda dengan kota user maka terkadang muncul layanan CTY atau CTS
+                        'kota_customer_id': {{ $tujuan_kota }},
                         'total_berat': total_berat,
                         'jenis_kurir': kurir
                     },
@@ -291,7 +291,6 @@
                     'req_kurir': kurir,
                     'req_layanan': ongkir_split_before,
                     'req_total_pembayaran': total_bayar,
-                    'req_metode_pembayaran': $('#metode_pembayaran').val()
                 },
                 beforeSend: function() {
                     $(document).find('label.error-text').text('');
@@ -319,6 +318,28 @@
 
                         Toast.fire({
                             icon: 'success',
+                            title: data.msg
+                        })
+                        $("#data_keranjang_header").html(data.data_keranjang_terbaru);
+                        $(".cart-total-price").html(data.total_harga_produk_dlm_keranjang);
+                        window.location.href = `${data.route}`;
+                    } else if (data.status_keranjang_kosong == 1) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal
+                                    .stopTimer)
+                                toast.addEventListener('mouseleave', Swal
+                                    .resumeTimer)
+                            }
+                        })
+
+                        Toast.fire({
+                            icon: 'error',
                             title: data.msg
                         })
                         $("#data_keranjang_header").html(data.data_keranjang_terbaru);

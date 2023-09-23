@@ -41,7 +41,7 @@
 
     <div class="container banner-group-1">
         <div class="categories mb-4">
-            <h3 class="title text-center font-weight-bold mt-4">Explore Popular Categories</h3>
+            <h3 class="title text-center font-weight-bold mt-4">Kategori</h3>
             <div class="owl-carousel carousel-theme carousel-simple carousel-with-shadow row cols-2 cols-xs-3 cols-sm-4 cols-md-5 cols-lg-6 cols-xl-8"
                 data-toggle="owl"
                 data-owl-options='{
@@ -129,12 +129,9 @@
     </div>
     <!-- End .container -->
 
-    <div class="mb-3"></div>
-    <!-- End .mb-3 -->
 
-    <div class="bg-light pb-5">
+    <div class="bg-light pb-3 pt-3">
         <div class="container deal-section">
-            <h3 class="title text-center mt-5 font-weight-bold">Today's Best Deal</h3>
             <div class="deal-carousel owl-carousel owl-simple carousel-equal-height row cols-2 cols-md-3 cols-lg-4 cols-xl-5"
                 data-toggle="owl"
                 data-owl-options='{
@@ -183,9 +180,11 @@
                             <span class="product-label label-sale">SALE</span>
                             <a href="{{ route('HalamanDetailProduk', $data_produk->slug) }}" class="w-100">
                                 <img src="{{ asset('storage/' . $gambar_produk_first->path) }}" alt="Product image"
-                                    class="product-image" style="aspect-ratio: 5/4;">
+                                    class="product-image"
+                                    style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover;">
                                 <img src="{{ asset('storage/' . $gambar_produk_last->path) }}" alt="Product image"
-                                    class="product-image-hover" style="aspect-ratio: 5/4;">
+                                    class="product-image-hover"
+                                    style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover;">
                             </a>
                             {{-- <div class="product-countdown bg-light" data-until="+55h" data-relative="true"
                                 data-labels-short="true"></div>
@@ -215,16 +214,42 @@
                         </div>
                         <div class="product-action position-relative visible">
                             <div class="ratings-container">
-                                <div class="ratings">
-                                    <div class="ratings-val" style="width: 100%;"></div>
-                                </div>
-                                <span class="ratings-text ml-2"> ( 2 Reviews )</span>
+                                @if (App\Models\Penilaian::with('relasi_pesanan_detail')->whereRelation('relasi_pesanan_detail', 'produk_id', $data_produk->id)->first())
+                                    @php
+                                        $data_rating = App\Models\Penilaian::with('relasi_pesanan_detail')
+                                            ->whereRelation('relasi_pesanan_detail', 'produk_id', $data_produk->id)
+                                            ->first();
+                                        $rating = App\Models\Penilaian::with('relasi_pesanan_detail')
+                                            ->whereRelation('relasi_pesanan_detail', 'produk_id', $data_produk->id)
+                                            ->avg('rating');
+                                        $avgRating = number_format($rating, 1);
+                                    @endphp
+                                    <div class="new-price"
+                                        style="display: inline-block; font-size: 1.7rem; letter-spacing: 0rem; line-height: 1;">
+                                        <div class="ratings" style="font-size: 1.6rem!important;">
+                                            <div class="ratings-val"
+                                                @if ($data_rating->rating == 1) style="width: 20%; font-size: 1.6rem!important;"
+                                                @elseif($data_rating->rating == 2) style="width: 40%; font-size: 1.6rem!important;"
+                                                @elseif($data_rating->rating == 3) style="width: 60%; font-size: 1.6rem!important;"
+                                                @elseif ($data_rating->rating == 4) style="width: 80%; font-size: 1.6rem!important;"
+                                                @elseif($data_rating->rating == 5) style="width: 100%; font-size: 1.6rem!important;" @endif>
+                                            </div>
+                                            <!-- End .ratings-val -->
+                                        </div><!-- End .ratings -->
+
+                                        <span class="ratings-text ml-2"
+                                            style="color:chocolate; font-size:1.3rem;">({{ $avgRating }})</span>
+
+                                    </div>
+                                @else
+                                    {{-- <label class="text-danger">Belum Ada Review</label> --}}
+                                @endif
                             </div>
                         </div>
                         <div class="product-sold">
                             <div class="product-price mb-1">
                                 <div class="new-price">{!! help_format_rupiah($produk_detail->harga) !!}</div>
-                                <div class="old-price font-size-normal font-weight-normal">$290.00</div>
+                                {{-- <div class="old-price font-size-normal font-weight-normal">$290.00</div> --}}
                             </div>
                         </div>
                     </div>
@@ -235,37 +260,9 @@
     </div>
 
 
-    <div class="bg-light pt-3 pb-5">
+    <div class="bg-light pb-3 pt-3">
         <div class="container deal-section">
-            <h3 class="title text-center mt-5 font-weight-bold">Today's Best Deal</h3>
-            {{-- <div class="deal-carousel owl-carousel owl-simple carousel-equal-height row cols-2 cols-md-3 cols-lg-4 cols-xl-5"
-                data-toggle="owl"
-                data-owl-options='{
-                    "nav": true,
-                    "dots": false,
-                    "margin": 0,
-                    "loop": false,
-                    "responsive": {
-                        "0": {
-                            "items":2
-                        },
-                        "480": {
-                            "items":2
-                        },
-                        "767": {
-                            "items":3
-                        },
-                        "992": {
-                            "items":4
-                        },
-                        "1200": {
-                            "items":5
-                        },
-                        "1600": {
-                            "items":5
-                        }
-                    }
-                }'> --}}
+            <h3 class="title text-center font-weight-bold">Rekomendasi</h3>
             <div class="row justify-content-center">
                 @foreach ($produk as $index => $data_produk)
                     @php
@@ -287,25 +284,12 @@
                                 <span class="product-label label-sale">SALE</span>
                                 <a href="{{ route('HalamanDetailProduk', $data_produk->slug) }}" class="w-100">
                                     <img src="{{ asset('storage/' . $gambar_produk_first->path) }}" alt="Product image"
-                                        class="product-image" style="aspect-ratio: 5/4;">
+                                        class="product-image"
+                                        style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover;">
                                     <img src="{{ asset('storage/' . $gambar_produk_last->path) }}" alt="Product image"
-                                        class="product-image-hover" style="aspect-ratio: 5/4;">
+                                        class="product-image-hover"
+                                        style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover;">
                                 </a>
-                                {{-- <div class="product-countdown bg-light" data-until="+55h" data-relative="true"
-                                data-labels-short="true"></div>
-                            <div class="product-action-vertical">
-                                <a href="#" class="btn-product-icon text-dark btn-wishlist"
-                                    title="Add to wishlist">
-                                    <span>add to wishlist</span>
-                                </a>
-                                <a href="popup/quickView.html" class="btn-product-icon text-dark btn-quickview"
-                                    title="Quick view">
-                                    <span>Quick view</span>
-                                </a>
-                                <a href="#" class="btn-product-icon text-dark btn-compare" title="Compare">
-                                    <span>Compare</span>
-                                </a>
-                            </div> --}}
                             </figure>
 
                             <div class="product-body pb-1">
@@ -319,16 +303,42 @@
                             </div>
                             <div class="product-action position-relative visible">
                                 <div class="ratings-container">
-                                    <div class="ratings">
-                                        <div class="ratings-val" style="width: 100%;"></div>
-                                    </div>
-                                    <span class="ratings-text ml-2"> ( 2 Reviews )</span>
+                                    @if (App\Models\Penilaian::with('relasi_pesanan_detail')->whereRelation('relasi_pesanan_detail', 'produk_id', $data_produk->id)->first())
+                                        @php
+                                            $data_rating = App\Models\Penilaian::with('relasi_pesanan_detail')
+                                                ->whereRelation('relasi_pesanan_detail', 'produk_id', $data_produk->id)
+                                                ->first();
+                                            $rating = App\Models\Penilaian::with('relasi_pesanan_detail')
+                                                ->whereRelation('relasi_pesanan_detail', 'produk_id', $data_produk->id)
+                                                ->avg('rating');
+                                            $avgRating = number_format($rating, 1);
+                                        @endphp
+                                        <div class="new-price"
+                                            style="display: inline-block; font-size: 1.7rem; letter-spacing: 0rem; line-height: 1;">
+                                            <div class="ratings" style="font-size: 1.6rem!important;">
+                                                <div class="ratings-val"
+                                                    @if ($data_rating->rating == 1) style="width: 20%; font-size: 1.6rem!important;"
+                                                    @elseif($data_rating->rating == 2) style="width: 40%; font-size: 1.6rem!important;"
+                                                    @elseif($data_rating->rating == 3) style="width: 60%; font-size: 1.6rem!important;"
+                                                    @elseif ($data_rating->rating == 4) style="width: 80%; font-size: 1.6rem!important;"
+                                                    @elseif($data_rating->rating == 5) style="width: 100%; font-size: 1.6rem!important;" @endif>
+                                                </div>
+                                                <!-- End .ratings-val -->
+                                            </div><!-- End .ratings -->
+
+                                            <span class="ratings-text ml-2"
+                                                style="color:chocolate; font-size:1.3rem;">({{ $avgRating }})</span>
+
+                                        </div>
+                                    @else
+                                        {{-- <label class="text-danger">Belum Ada Review</label> --}}
+                                    @endif
                                 </div>
                             </div>
                             <div class="product-sold">
                                 <div class="product-price mb-1">
                                     <div class="new-price">{!! help_format_rupiah($produk_detail->harga) !!}</div>
-                                    <div class="old-price font-size-normal font-weight-normal">$290.00</div>
+                                    {{-- <div class="old-price font-size-normal font-weight-normal">$290.00</div> --}}
                                 </div>
                             </div>
                         </div>

@@ -1,8 +1,8 @@
-<div class="tab-pane p-0 fade" id="sedang-dikemas-tab" role="tabpanel">
+<div class="tab-pane p-0 fade" id="dibayar-tab" role="tabpanel">
     <div class="product-group mb-lg-7 mb-4">
         <div class="col">
-            @forelse ($pesanan_dikemas as $data_pesanan)
-                {{-- @if ($data_pesanan->relasi_pesanan_status->status_pesanan_id == 4) --}}
+            @forelse ($pesanan_sudah_bayar as $data_pesanan)
+                {{-- @if ($data_pesanan->relasi_pesanan_status->status_pesanan_id == 10) --}}
                 @php
                     $pesanan_detail = \App\Models\PesananDetail::with(['relasi_produk.relasi_gambar', 'relasi_produk_detail.relasi_produk.relasi_kategori'])
                         ->where('pesanan_id', $data_pesanan->id)
@@ -10,7 +10,7 @@
                     $pesanan_status_log = \App\Models\PesananStatusLog::with('relasi_status_master')
                         ->where([
                             'pesanan_id' => $data_pesanan->id,
-                            'status_pesanan_id' => 4,
+                            'status_pesanan_id' => 10,
                         ])
                         ->first();
                 @endphp
@@ -62,17 +62,6 @@
                             </h3>
                         </div>
                     </div>
-
-                    <div id="product-zoom-gallery" class="product-image-gallery" style="display: none">
-                        <img class="product-image object-fit-fill border rounded" style="aspect-ratio: 1/1; width:50%"
-                            id="product-zoom" src="{{ asset('storage/' . $data_pesanan->bukti_pembayaran) }}"
-                            data-zoom-image="{{ asset('storage/' . $data_pesanan->bukti_pembayaran) }}"
-                            alt="product image">
-                        <a class="product-gallery-item" href="#"
-                            data-image="{{ asset('storage/' . $data_pesanan->bukti_pembayaran) }}"
-                            data-zoom-image="{{ asset('storage/' . $data_pesanan->bukti_pembayaran) }}">
-                        </a>
-                    </div>
                 </div>
                 {{-- @endif --}}
             @empty
@@ -85,3 +74,60 @@
         </div>
     </div>
 </div>
+@section('script')
+    <script>
+        $(document).on('click', '.konfirmasi-pesanan-diterima', function(event) {
+            const id = $(event.currentTarget).attr('pesanan-id');
+            Swal.fire({
+                title: 'Yakin pesanan telah diterima?',
+                icon: 'warning',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Batal',
+                showCancelButton: true,
+            }).then(function(result) {
+                if (result.value) {
+                    $.ajax({
+                        url: "{{ route('customer.KonfirmasiPesananDiterima') }}",
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: {
+                            'req_pesanan_id': id,
+                            'req_status_pesanan_id': 6 //Kode Status Selesai
+                        },
+                        success: function(response) {
+                            if (response.konfirmasi_pesanan_berhasil == 1) {
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.addEventListener('mouseenter', Swal
+                                            .stopTimer)
+                                        toast.addEventListener('mouseleave', Swal
+                                            .resumeTimer)
+                                    }
+                                })
+
+                                Toast.fire({
+                                        icon: 'success',
+                                        title: response.msg
+                                    }),
+                                    location.reload();
+                            }
+                        }
+                    });
+                } else {
+                    Swal.fire(
+                        "Cancel!",
+                        "Your file has been cancel deleted.",
+                        "failed"
+                    )
+                }
+            });
+        });
+    </script>
+@endsection

@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\PesananDetail;
 use App\Models\PesananStatus;
 use App\Http\Controllers\Controller;
+use App\Models\PesananStatusLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -34,13 +35,12 @@ class PembayaranController extends Controller
             'alamat_utama' => 1
             ])->first();
 
-        $total_berat = 0;
-        $data_berat = Keranjang::where('users_id', Auth::user()->id)->get();
-        foreach($data_berat as $data){
-            $total_berat += $data->total_berat * $data->kuantitas;
-        }
-
         if($hitungDataKeranjang > 0){
+            $total_berat = 0;
+            $data_berat = Keranjang::where('users_id', Auth::user()->id)->get();
+            foreach($data_berat as $data){
+                $total_berat += $data->total_berat * $data->kuantitas;
+            }
             return view('Front.buat_pesanan.buat_pesanan', compact('data_keranjang', 'data_alamat_customer', 'gambar_produk',
             'hitungDataKeranjang', 'provinsi', 'total_berat'));
         }else{
@@ -94,54 +94,61 @@ class PembayaranController extends Controller
                     ->select('id')
                     ->first();
 
-                $simpan_data_pesanan = Pesanan::create([
-                    'users_id' => Auth::user()->id,
-                    'alamat_pengiriman_id' => $alamat_utama_customer->id,
-                    'kode_pesanan' => 'INV_'.Auth::user()->id.Carbon::now()->format('YmdHis'),
-                    'total_pembayaran' => $data['req_total_pembayaran'],
-                    // 'total_ongkir' => $ongkir['costs'][$data['req_layanan']]['cost'][0]['value'], => Terkadang Berbeda saat dari web lngusng ada service CTY, tetapi jika di cek langsung dari backend hanya ada REG dan OKE
-                    'total_ongkir' => $data['req_total_ongkir'],
-                    'total_berat' => $data['req_total_berat'],
-                    'metode_pembayaran' => $data['req_metode_pembayaran'],
-                    'ekspedisi_layanan' => $ongkir['name'].'_'.$ongkir['costs'][$data['req_layanan']]['description'],
-                    'kode_pengiriman' => null,
-                    'orders_date' => Carbon::now(),
-                    'expired_date' => Carbon::now()->addDays(1),
-                    'bukti_pembayaran' => null,
-                ]);
+                $hitungDataKeranjang = Keranjang::func_data_keranjang_pengguna()->count();
+                if($hitungDataKeranjang < 0){
+                    return response()->json([
+                        'status_keranjang_kosong' => 1,
+                        'route' => route('HalamanBeranda'),
+                        'data_keranjang_terbaru' => help_data_isi_keranjang_baru(),
+                        'total_harga_produk_dlm_keranjang' => help_total_harga_produk_keranjang()
+                    ]);
+                }elseif($hitungDataKeranjang > 0){
 
-                PesananStatus::create([
-                    'pesanan_id' => $simpan_data_pesanan->id,
-                    'status_pesanan_id' => 1 //Belum Bayar
-                ]);
+                    $simpan_data_pesanan = Pesanan::create([
+                        'users_id' => Auth::user()->id,
+                        'alamat_pengiriman_id' => $alamat_utama_customer->id,
+                        'kode_pesanan' => 'INV_'.Auth::user()->id.Carbon::now()->format('YmdHis'),
+                        'total_pembayaran' => $data['req_total_pembayaran'],
+                        'total_ongkir' => $ongkir['costs'][$data['req_layanan']]['cost'][0]['value'],
+                        'total_berat' => $data['req_total_berat'],
+                        'ekspedisi_layanan' => $ongkir['name'].'_'.$ongkir['costs'][$data['req_layanan']]['description'],
+                        'kode_pengiriman' => null,
+                        'orders_date' => Carbon::now(),
+                        'expired_date' => Carbon::now()->addDays(1),
+                        'bukti_pembayaran' => null,
+                    ]);
 
-                $data_keranjang = Keranjang::where('users_id', Auth::user()->id)->get()->toArray();
-                    foreach($data_keranjang as $key => $produk_dalam_keranjang){
-                        PesananDetail::create([
-                            'pesanan_id' => $simpan_data_pesanan->id,
-                            'produk_id' => $produk_dalam_keranjang['produk_id'],
-                            'produk_detail_id' => $produk_dalam_keranjang['produk_detail_id'],
-                            'kuantitas' => $produk_dalam_keranjang['kuantitas'],
-                            'total_harga' => $produk_dalam_keranjang['total_bayar'],
-                            'total_berat' => $produk_dalam_keranjang['total_berat'],
-                        ]);
-                        // $data_detail_produk = ProdukDetail::where([
-                        //     'id' => $produk_dalam_keranjang['produk_detail_id']
-                        // ])->first();
-                        // $data_detail_produk['stok'] = $data_detail_produk['stok'] - $produk_dalam_keranjang['kuantitas'];
-                        // $data_detail_produk->update();
-                    }
-                $data_keranjang_object = Keranjang::where('users_id', Auth::user()->id)->get();
-                Keranjang::destroy($data_keranjang_object);
+                    PesananStatus::create([
+                        'pesanan_id' => $simpan_data_pesanan->id,
+                        'status_pesanan_id' => 1 //Belum Bayar
+                    ]);
 
-                return response()->json([
-                    'status_buat_pesanan' => 1,
-                    'route' => route('customer.HalamanBayarPesanan', $simpan_data_pesanan->id),
-                    'data_keranjang_terbaru' => help_data_isi_keranjang_baru(),
-                    'total_harga_produk_dlm_keranjang' => help_total_harga_produk_keranjang()
-                ]);
-                // dd($ongkir['costs'][$data['req_layanan']]['cost'][0]['value']);
-                // $ongkir = $cost->where([''])
+                    $data_keranjang = Keranjang::where('users_id', Auth::user()->id)->get()->toArray();
+                        foreach($data_keranjang as $key => $produk_dalam_keranjang){
+                            PesananDetail::create([
+                                'pesanan_id' => $simpan_data_pesanan->id,
+                                'produk_id' => $produk_dalam_keranjang['produk_id'],
+                                'produk_detail_id' => $produk_dalam_keranjang['produk_detail_id'],
+                                'kuantitas' => $produk_dalam_keranjang['kuantitas'],
+                                'total_harga' => $produk_dalam_keranjang['total_bayar'],
+                                'total_berat' => $produk_dalam_keranjang['total_berat'],
+                            ]);
+                            // $data_detail_produk = ProdukDetail::where([
+                            //     'id' => $produk_dalam_keranjang['produk_detail_id']
+                            // ])->first();
+                            // $data_detail_produk['stok'] = $data_detail_produk['stok'] - $produk_dalam_keranjang['kuantitas'];
+                            // $data_detail_produk->update();
+                        }
+                    $data_keranjang_object = Keranjang::where('users_id', Auth::user()->id)->get();
+                    Keranjang::destroy($data_keranjang_object);
+
+                    return response()->json([
+                        'status_buat_pesanan' => 1,
+                        'route' => route('customer.HalamanBayarPesanan', $simpan_data_pesanan->id),
+                        'data_keranjang_terbaru' => help_data_isi_keranjang_baru(),
+                        'total_harga_produk_dlm_keranjang' => help_total_harga_produk_keranjang()
+                    ]);
+                }
             }
         }
         // Menghabpus String di antara string
@@ -154,10 +161,51 @@ class PembayaranController extends Controller
             $pesanan = Pesanan::with('relasi_alamat_pengiriman', 'relasi_user')->where(['id' => $pesanan_id, 'users_id'=> Auth::user()->id])->first();
             $pesanan_detail = PesananDetail::where('pesanan_id', $pesanan->id)->get();
             $pesanan_status = PesananStatus::with('relasi_status_master')->where('pesanan_id', $pesanan->id)->orderBy('created_at', 'desc')->first();
+
+                \Midtrans\Config::$serverKey = config('midtrans.server_key');
+                \Midtrans\Config::$isProduction = false;
+                \Midtrans\Config::$isSanitized = true;
+                \Midtrans\Config::$is3ds = true;
+
+                $params = array(
+                    'transaction_details' => array(
+                        'order_id' => $pesanan->id,
+                        'gross_amount' => $pesanan->total_pembayaran,
+                    ),
+                    'customer_details' => array(
+                        'first_name' => Auth::user()->name,
+                        'email' => Auth::user()->email
+                    ),
+                );
+
+                $snap_token = \Midtrans\Snap::getSnapToken($params);
+                // dd($snapToken);
+
         } catch (Exception $e) {
             return redirect()->back();
         }
-        return view('Front.pembayaran.bayar_pesanan', compact('pesanan', 'pesanan_detail', 'pesanan_status'));
+        // return view('Front.pembayaran.bayar_pesanan', compact('pesanan', 'pesanan_detail', 'pesanan_status'));
+        return view('Front.pembayaran.bayar_pesanan', compact('snap_token', 'pesanan', 'pesanan_detail', 'pesanan_status'));
+    }
+
+    public function callback(Request $request){
+        $server_key = config('midtrans.server_key');
+        $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$server_key);
+        if($hashed == $request->signature_key){
+            if($request->transaction_status == 'settlement'){
+                $pesanan = PesananStatus::where('pesanan_id', $request->order_id)->first();
+                $pesanan->update(['status_pesanan_id' => 10]);
+
+                PesananStatusLog::create([
+                    'pesanan_id' => $request->order_id,
+                    'status_pesanan_id' => 10
+                ]);
+
+                Pesanan::where('id', $request->order_id)->update([
+                    'metode_pembayaran' => $request->payment_type
+                ]);
+            }
+        }
     }
 
     public function upload_bukti_pembayaran(Request $request, $pesanan_id){

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Front;
 
+use Carbon\Carbon;
+use App\Models\Pesanan;
 use App\Models\Penilaian;
 use App\Models\ProdukDetail;
 use Illuminate\Http\Request;
@@ -126,5 +128,43 @@ class PesananController extends Controller
 
             }
         }
+    }
+
+    public function batalkan_pesanan_oleh_sistem(Request $request){
+        // $data_request = $request->all();
+        // $data_pesanan_status = PesananStatus::where([
+        //     'pesanan_id' => $data_request['pesanan_id']
+        // ])->get();
+
+        $data_pesanan = Pesanan::whereDate('expired_date', '<', Carbon::now())->with('relasi_pesanan_status')->whereRelation('relasi_pesanan_status', 'status_pesanan_id', 1)->get();
+        foreach($data_pesanan as $row_data_pesanan){
+                    $produk_detail = Pesanan::find($row_data_pesanan['id']);
+                    $produk_detail->delete();
+                };
+        return "Hapus data tidak bayar berhasil";
+        // $data_pesanan_detail = PesananDetail::where('pesanan_id', $data_request['pesanan_id'])->get()->toArray();
+
+        // foreach( $data_pesanan_status as $row_pesanan){
+        //     foreach($data_pesanan_detail as $row_pesanan_detail){
+        //         $produk_detail = ProdukDetail::find($row_pesanan_detail['produk_detail_id']);
+        //         $produk_detail->stok = $row_pesanan_detail['kuantitas'] + $produk_detail->stok;
+        //         $produk_detail->save();
+        //     };
+        // }
+
+        // $data_pesanan_status->update([
+        //     'status_pesanan_id' => 8
+        // ]);
+
+        // PesananStatusLog::create([
+        //     'pesanan_id' => $data_request['pesanan_id'],
+        //     'status_pesanan_id' => 8,
+        //     'catatan' => $data_request['catatan']
+        // ]);
+
+        // return response()->json([
+        //     'pembatalan_pesanan_oleh_pengguna' => 1,
+        //     'msg' => 'Berhasil Membatalkan Pesanan'
+        // ]);
     }
 }

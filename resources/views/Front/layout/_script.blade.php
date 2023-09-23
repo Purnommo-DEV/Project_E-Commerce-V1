@@ -19,7 +19,6 @@
 <!-- Main JS File -->
 <script src="{{ asset('Front/assets/js/main.js') }}"></script>
 <script src="{{ asset('Front/assets/js/demos/demo-13.js') }}"></script>
-
 {{-- User Registrasi --}}
 <script>
     $(document).ready(function() {

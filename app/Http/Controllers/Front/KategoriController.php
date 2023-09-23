@@ -11,7 +11,7 @@ class KategoriController extends Controller
 {
     public function halaman_kategori_detail($slug){
         $kategori = Kategori::where('slug', $slug)->first();
-        $produk = Produk::where('kategori_id', $kategori->id)->get();
+        $produk = Produk::with('relasi_kategori')->where('kategori_id', $kategori->id)->orderBy('created_at', 'asc')->get();
 
         return view('Front.kategori_detail.kategori_detail', compact('kategori', 'produk'));
     }
@@ -22,32 +22,19 @@ class KategoriController extends Controller
             // echo "<pre>"; print_r($data); die;
         }
 
-        if(isset($data['urutan']) && !empty($data['urutan'])) {
-            if($data['urutan']=="produk_terbaru") {
-                $data_produk=Produk::orderBy('created_at', 'desc')->get();
-
+        if(isset($data['req_urutan']) && !empty($data['req_urutan'])) {
+            if($data['req_urutan']=="produk_terbaru") {
+                $produk=Produk::with('relasi_kategori')->whereRelation('relasi_kategori', 'slug', $data['req_kategori_slug'])->orderBy('created_at', 'desc')->get();
             }
 
-            else if($data['urutan']=="produk_a_z") {
-                $data_produk=Produk::orderBy('name', 'asc')->get();
-
-            }
-
-            else if($data['urutan']=="produk_harga_rendah") {
-                $data_produk=Produk::orderBy('harga', 'asc')->get();
-
-            }
-
-            else if($data['urutan']=="produk_harga_tinggi") {
-                $data_produk=Produk::orderBy('harga', 'desc')->get();
+            else if($data['req_urutan']=="produk_a_z") {
+                $produk=Produk::with('relasi_kategori')->whereRelation('relasi_kategori', 'slug', $data['req_kategori_slug'])->orderBy('nama_produk', 'asc')->get();
             }
         }
         else {
-            $data_produk=Produk::get();
+            $produk=Produk::with('relasi_kategori')->whereRelation('relasi_kategori', 'slug', $data['req_kategori_slug'])->orderBy('nama_produk', 'asc')->get();
         }
 
-        // $data_produk = Produk::orderBy('id', 'DESC')->get();
-        $produk = Produk::with(['relasi_kategori', 'relasi_gambar'])->orderBy('created_at', 'desc')->get();
         $kategori = Kategori::get(['id', 'nama_kategori', 'slug', 'path']);
         return view('Front.kategori_detail.daftar_produk_kategori')->with(compact('produk', 'kategori'));
     }

@@ -117,7 +117,9 @@
                             </div>
                         </div>
                     @else
-                        <a href="{{ route('Login') }}" class="btn btn-sm btn-outline-primary-2">Masuk | Daftar</a>
+                        <a href="{{ route('Login') }}" class="btn btn-sm btn-outline-primary-2"
+                            style="min-width: 50px!important;">Masuk | Daftar
+                        </a>
                 @endif
                 <!-- End .cart-dropdown -->
             </div>
