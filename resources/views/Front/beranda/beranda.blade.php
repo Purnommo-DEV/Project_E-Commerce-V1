@@ -1,6 +1,6 @@
 @extends('Front.layout.master', ['title' => 'Beranda'])
 @section('konten')
-    <div class="intro-slider-container mb-4">
+    <div class="intro-slider-container mb-5">
         <div class="intro-slider owl-carousel owl-simple owl-nav-inside" data-toggle="owl"
             data-owl-options='{
                         "nav": false,
@@ -181,10 +181,10 @@
                             <a href="{{ route('HalamanDetailProduk', $data_produk->slug) }}" class="w-100">
                                 <img src="{{ asset('storage/' . $gambar_produk_first->path) }}" alt="Product image"
                                     class="product-image"
-                                    style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover;">
+                                    style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover; border-radius: 0px !important;">
                                 <img src="{{ asset('storage/' . $gambar_produk_last->path) }}" alt="Product image"
                                     class="product-image-hover"
-                                    style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover;">
+                                    style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover; border-radius: 0px !important;">
                             </a>
                             {{-- <div class="product-countdown bg-light" data-until="+55h" data-relative="true"
                                 data-labels-short="true"></div>
@@ -278,17 +278,18 @@
                             ->where('produk_id', $data_produk->id)
                             ->first();
                     @endphp
-                    <div class="cols-12 col-6 col-md-6 col-lg-6 col-xl-3">
+                    <div class="cols-12 col-6 col-md-6 col-lg-6 col-xl-2"
+                        style="padding-right: 2px!important; padding-left: 2px;!important;">
                         <div class="product d-flex flex-column overflow-hidden">
                             <figure class="mb-0 product-media bg-white d-flex justify-content-center align-items-center">
                                 <span class="product-label label-sale">SALE</span>
                                 <a href="{{ route('HalamanDetailProduk', $data_produk->slug) }}" class="w-100">
                                     <img src="{{ asset('storage/' . $gambar_produk_first->path) }}" alt="Product image"
                                         class="product-image"
-                                        style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover;">
+                                        style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover; border-radius: 0px !important;">
                                     <img src="{{ asset('storage/' . $gambar_produk_last->path) }}" alt="Product image"
                                         class="product-image-hover"
-                                        style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover;">
+                                        style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover; border-radius: 0px !important;">
                                 </a>
                             </figure>
 

@@ -112,10 +112,10 @@
                                             {{-- <a href="#!" data-toggle="modal"
                                                 data-target="#modal-upload-bukti-bayar"
                                                 class="btn btn-outline-primary btn-sm"
-                                                style="color: #c96; border-color:#c96; font-size: 1rem;">Upload Bukti
+                                                style="color: #0078b1; border-color:#0078b1; font-size: 1rem;">Upload Bukti
                                                 Pembayaran</a> --}}
                                             <button class="btn btn-outline-primary btn-sm"
-                                                style="color: #c96; border-color:#c96; font-size: 1rem;"
+                                                style="color: #0078b1; border-color:#0078b1; font-size: 1rem;"
                                                 id="pay-button">Bayar Sekarang</button>
                                         </td>
 

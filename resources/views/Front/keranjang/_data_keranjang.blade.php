@@ -1,14 +1,15 @@
 <div class="row">
     <div class="col-lg-9">
-        <table class="table table-cart table-mobile" style="border-radius: 15px; background: #f9f9f9; overflow: hidden;">
+        <table class="table table-bordered m-0 table-cart table-mobile"
+            style=" border-collapse: collapse; border-radius: 8px; border-style: hidden; box-shadow: 0 0 0 0.3px #666;">
             <thead>
-                <tr style="background: #a97c50;">
+                <tr style="background: #0078b1;">
                     <th style="color: white; padding-left: 2rem; padding-right: 2rem;"><b>Nama Produk</b>
                     </th>
                     <th style="color: white; padding-left: 2rem; padding-right: 2rem;"><b>Harga</b></th>
                     <th style="color: white; padding-left: 2rem; padding-right: 2rem;"><b>Kuantitas</b>
                     </th>
-                    <th style="color: white; padding-left: 2rem; padding-right: 2rem;"><b>Total</b></th>
+                    {{-- <th style="color: white; padding-left: 2rem; padding-right: 2rem;"><b>Total</b></th> --}}
                     <th style="color: white; padding-left: 2rem; padding-right: 2rem;"></th>
                 </tr>
             </thead>
@@ -21,7 +22,7 @@
                 @foreach ($data_keranjang as $keranjang)
                     <tr>
                         <td style="padding-left: 2rem; padding-right: 2rem;" class="product-col" style="color:black;">
-                            <div class="product">
+                            <div class="product" style="border-style: hidden;">
                                 @php
                                     $gambar_produk = \App\Models\ProdukGambar::where('produk_id', $keranjang->relasi_produk->id)
                                         ->select(['produk_id', 'path'])
@@ -63,11 +64,11 @@
                             </div>
                         </td>
                         @php
-                            $total = $keranjang->relasi_produk_detail->harga * $keranjang->kuantitas;
+                            // $total = $keranjang->relasi_produk_detail->harga * $keranjang->kuantitas;
                             $sub_total = $sub_total + $keranjang->relasi_produk_detail->harga * $keranjang->kuantitas;
                         @endphp
-                        <td style="padding-left: 2rem; padding-right: 2rem;" class="price-col">
-                            @currency($total)</td>
+                        {{-- <td style="padding-left: 2rem; padding-right: 2rem;" class="price-col">
+                            @currency($total)</td> --}}
                         <td style="padding-left: 2rem; padding-right: 2rem;" class="remove-col">
                             <button class="btn btn-increment btn-danger btn-sm btn-spinner btn-sm btnItemDelete"
                                 type="button" data-cartid="{{ $keranjang['id'] }}"

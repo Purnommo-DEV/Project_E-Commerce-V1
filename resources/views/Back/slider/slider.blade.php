@@ -73,6 +73,53 @@
             </div>
         </div>
     </section>
+    {{-- <div class="modal fade text-left" id="modalEditDataSlider" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="myModalLabel33" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel33">Ubah Kendaraan</h4>
+                    <button type="button" class="close batal" data-bs-dismiss="modal" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <form id="formEditDataSlider" name="formEditDataSlider" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="slider-id" hidden>
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <label class="col col-form-label" for="judul">Judul</label>
+                            <div class="col-md-9">
+                                <textarea type="text" name="judul" id="judul-id" class="ckeditor form-control" placeholder="Judul"></textarea>
+                            </div>
+                            <div class="input-group has-validation">
+                                <label class="text-danger error-text judul_error"></label>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col col-form-label" for="plat">Gambar</label>
+                            <div class="col-md-9">
+                                <input type="file" accept="image/*" name="gambar" class="form-control"
+                                    id="exampleInputPassword1">
+                            </div>
+                            <div class="input-group has-validation">
+                                <label class="text-danger error-text gambar_error"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary batal" data-bs-dismiss="modal">
+                            Batal
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1" id="ubah-data">
+                            Simpan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div> --}}
+
     <div class="modal fade text-left" id="modalEditDataSlider" data-bs-backdrop="static" data-bs-keyboard="false"
         aria-labelledby="myModalLabel33" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -204,6 +251,7 @@
                 processData: false,
                 dataType: 'json',
                 contentType: false,
+                cache: false,
                 beforeSend: function() {
                     $(document).find('label.error-text').text('');
                 },
@@ -232,17 +280,91 @@
                             icon: 'success',
                             title: data.msg
                         })
-                        table_data_slider.ajax.reload(null, false)
-
-                        $("#formTambahDataSlider")[0].reset();
-                        $("#modalTambahDataSlider").modal('hide')
                     }
-                }
+                    table_data_slider.draw();
+                    $("#formTambahDataSlider").trigger('reset');
+                    $("#modalTambahDataSlider").modal('hide')
+                },
             });
         });
 
         // CKEDITOR.replace('judulEdit');
         //     var editorData= CKEDITOR.instances['judulEdit'].getData();
+
+        // $('body').on('click', '.edit_slider', function() {
+        //     const id = $(this).attr('id-slider');
+        //     const data_slider = daftar_data_slider[id];
+        //     alert(id);
+
+        //     $("#modalEditDataSlider").modal('show')
+        //     var editorData = CKEDITOR.instances['judul-id'].setData(data_slider.judul);
+        //     CKEDITOR.replace('judul-id');
+        //     // $('#saveBtn').val("edit-user");
+        //     // $("#formEditDataSlider [name='id']").val(id)
+        //     $('#ubah-data').val("edit-slider")
+        //     $('#slider-id').val(id);
+        //     $('#judul-id').text(data_slider.judul);
+        // });
+
+        // $('#ubah-data').click(function(e) {
+        //     e.preventDefault();
+        //     var id_slider = $('#slider-id').val();
+        //     var judul = $('#judul-id').text();
+        //     $.ajax({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         },
+        //         data: {
+        //             'id': id_slider,
+        //             'judul': judul
+        //         },
+        //         url: "{{ route('admin.EditDataSlider') }}",
+        //         type: "POST",
+        //         // processData: false,
+        //         dataType: 'json',
+        //         // contentType: false,
+        //         // beforeSend: function() {
+        //         //     $(document).find('label.error-text').text('');
+        //         // },
+        //         success: function(data) {
+        //             if (data.status == 0) {
+        //                 $.each(data.error, function(prefix, val) {
+        //                     $('label.' + prefix + '_error').text(val[0]);
+        //                     // $('span.'+prefix+'_error').text(val[0]);
+        //                 });
+        //             } else if (data.status == 1) {
+        //                 const Toast = Swal.mixin({
+        //                     toast: true,
+        //                     position: 'top-end',
+        //                     showConfirmButton: false,
+        //                     timer: 3000,
+        //                     timerProgressBar: true,
+        //                     didOpen: (toast) => {
+        //                         toast.addEventListener('mouseenter', Swal
+        //                             .stopTimer)
+        //                         toast.addEventListener('mouseleave', Swal
+        //                             .resumeTimer)
+        //                     }
+        //                 })
+
+        //                 Toast.fire({
+        //                     icon: 'success',
+        //                     title: data.msg
+        //                 })
+        //                 $('#formEditDataSlider').trigger("reset");
+        //                 $("#modalEditDataSlider").modal('hide');
+        //                 table_data_slider.draw();
+        //             }
+        //         },
+        //         error: function(data) {
+        //             console.log('Error:', data);
+        //         }
+        //     });
+        // });
+        // $('.batal').on('click', function() {
+        //     $(document).find('label.error-text').text('');
+        //     $("#role").empty().append('');
+        // })
 
         $(document).on('click', '.edit_slider', function(event) {
             const id = $(event.currentTarget).attr('id-slider');
@@ -297,10 +419,6 @@
                 });
             });
         });
-        // $('.batal').on('click', function() {
-        //     $(document).find('label.error-text').text('');
-        //     $("#role").empty().append('');
-        // })
 
 
         $(document).on('click', '.hapus_slider', function(event) {

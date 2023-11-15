@@ -30,6 +30,9 @@ class KategoriController extends Controller
             else if($data['req_urutan']=="produk_a_z") {
                 $produk=Produk::with('relasi_kategori')->whereRelation('relasi_kategori', 'slug', $data['req_kategori_slug'])->orderBy('nama_produk', 'asc')->get();
             }
+            else if($data['req_urutan']=="produk_terlaris") {
+                $produk=Produk::with('relasi_kategori')->whereRelation('relasi_kategori', 'slug', $data['req_kategori_slug'])->orderBy('nama_produk', 'asc')->get();
+            }
         }
         else {
             $produk=Produk::with('relasi_kategori')->whereRelation('relasi_kategori', 'slug', $data['req_kategori_slug'])->orderBy('nama_produk', 'asc')->get();

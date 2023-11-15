@@ -3,7 +3,8 @@
     <div class="page-content">
         <div class="container">
             <div class="row">
-                <div class="col-lg-9">
+                {{-- <div class="col-lg-9"> --}}
+                <div class="col-lg-12">
                     <div class="toolbox">
                         {{-- <div class="toolbox-left">
                             <div class="toolbox-info">
@@ -24,6 +25,9 @@
                                                 @if (isset($_GET['urutan']) && $_GET['urutan'] == 'produk_terbaru') selected="" @endif>Produk Terbaru</option>
                                             <option value="produk_a_z" @if (isset($_GET['urutan']) && $_GET['urutan'] == 'produk_a_z') selected="" @endif>
                                                 Produk A-Z</option>
+                                            <option value="produk_terlaris"
+                                                @if (isset($_GET['urutan']) && $_GET['urutan'] == 'produk_terlaris') selected="" @endif>
+                                                Produk Terlaris</option>
                                         </select>
                                     </div>
                                 </div>
@@ -56,7 +60,7 @@
                         </ul>
                     </nav> --}}
                 </div><!-- End .col-lg-9 -->
-                <aside class="col-lg-3 order-lg-first </div>">
+                {{-- <aside class="col-lg-3 order-lg-first </div>">
                     <div class="sidebar sidebar-shop">
                         <div class="widget widget-clean">
                             <label>Filters:</label>
@@ -150,7 +154,7 @@
                             </div><!-- End .collapse -->
                         </div><!-- End .widget -->
                     </div><!-- End .sidebar sidebar-shop -->
-                </aside><!-- End .col-lg-3 -->
+                </aside><!-- End .col-lg-3 --> --}}
             </div><!-- End .row -->
         </div><!-- End .container -->
     </div><!-- End .page-content -->

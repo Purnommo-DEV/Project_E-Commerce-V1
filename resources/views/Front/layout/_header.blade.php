@@ -8,7 +8,7 @@
                 </button>
 
                 <a href="{{ route('HalamanBeranda') }}" class="logo">
-                    <img src="{{ asset('Front/assets/images/logo/logo.jpg') }}" alt="Molla Logo" width="82"
+                    <img src="{{ asset('Front/assets/images/logo/logo.png') }}" alt="Logo" width="82"
                         height="25" />
                 </a>
             </div>

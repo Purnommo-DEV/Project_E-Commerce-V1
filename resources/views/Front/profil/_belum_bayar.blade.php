@@ -60,7 +60,7 @@
                             <h3 class="font-size-normal text-left mb-0"
                                 style="padding-left: 1rem; color:black; font-size: 1.3rem;">
                                 Jumlah harus dibayar :
-                                <b style="color:#c96;">{!! help_format_rupiah($data_pesanan->total_pembayaran) !!}</b> (
+                                <b style="color:#0078b1;">{!! help_format_rupiah($data_pesanan->total_pembayaran) !!}</b> (
                                 {{ $pesanan_detail->count() }} Produk)
                             </h3>
                         </div>

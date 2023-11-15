@@ -11,14 +11,18 @@
 <script src="{{ asset('Front/assets/js/jquery.plugin.min.js') }}"></script>
 <script src="{{ asset('Front/assets/js/jquery.countdown.min.js') }}"></script>
 <script src="{{ asset('Front/assets/js/jquery.elevateZoom.min.js') }}"></script>
-<script src="{{ asset('Front/assets/js/jquery.sticky-kit.min.js') }}"></script>
 <script src="{{ asset('Back/assets/vendors/form/jquery.form.min.js') }}"></script>
 <script src="{{ asset('Back/assets/vendors/validate/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('Back/assets/vendors/sweetalert/sweetalert.min.js') }}"></script>
 <script src="{{ asset('Back/assets/vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('Front/assets/js/jquery.sticky-kit.min.js') }}"></script>
 <!-- Main JS File -->
 <script src="{{ asset('Front/assets/js/main.js') }}"></script>
 <script src="{{ asset('Front/assets/js/demos/demo-13.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/gh/Talv/x-editable@develop/dist/bootstrap4-editable/js/bootstrap-editable.min.js">
+</script>
+
+
 {{-- User Registrasi --}}
 <script>
     $(document).ready(function() {
@@ -86,10 +90,8 @@
             }
         });
     });
-</script>
 
-{{-- User Login --}}
-<script>
+    // User Login
     $('#form-login-user').on('submit', function(e) {
         e.preventDefault();
         $.ajax({

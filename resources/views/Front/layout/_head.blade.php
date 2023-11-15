@@ -28,6 +28,7 @@
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
         data-client-key="SB-Mid-client-Woe8A8SQOaMFxZwr"></script>
 
+    <link rel="stylesheet" href="{{ asset('Back/assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('Front/assets/css/bootstrap.min.css') }}" />
 
     <link rel="stylesheet" href="{{ asset('Front/assets/css/plugins/owl-carousel/owl.carousel.css') }}" />
@@ -41,4 +42,9 @@
     <link rel="stylesheet" href="{{ asset('Back/assets/vendors/sweetalert2/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('Front/assets/css/plugins/line-awesome/css/line-awesome.min.css') }}" />
     <link rel="stylesheet" href="https://unpkg.com/placeholder-loading/dist/css/placeholder-loading.min.css">
+    <link rel="stylesheet" href="{{ asset('Front/assets/css/bootstrap-editable.css') }}" />
+    {{-- <link rel="stylesheet" href="{{ asset('Front/assets/css/bootstrap-editable.css') }}" /> --}}
+    {{-- <link href="https://cdn.jsdelivr.net/gh/Talv/x-editable@develop/dist/bootstrap4-editable/css/bootstrap-editable.css"
+        rel="stylesheet"> --}}
+
 </head>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Back\AdminBanner_Controller;
 use App\Http\Controllers\Back\AdminDashboard_Controller;
 use App\Http\Controllers\Back\AdminKategori_Controller;
 use App\Http\Controllers\Back\AdminLaporan_Controller;
+use App\Http\Controllers\Back\AdminPengguna_Controller;
 use App\Http\Controllers\Back\AdminPesanan_Controller;
 use App\Http\Controllers\Back\AdminProduk_Controller;
 use App\Http\Controllers\Back\AdminSlider_Controller;
@@ -34,12 +35,13 @@ Route::get('detail-produk/{slug}', [ProdukController::class, 'halaman_detail_pro
 Route::post('/response-produk-variasi', [ProdukController::class, 'resp_produk_variasi']);
 Route::get('/kategori-detail/{slug}', [KategoriController::class, 'halaman_kategori_detail'])->name('KategoriDetail');
 Route::get('/filter-urutkan', [KategoriController::class, 'filter_urutkan'])->name('FilterUrtukan');
-
+Route::controller(RegisterController::class)->group(function () {
+    Route::get('/kota/{provinsi_id}', 'list_kota');
+    });
 
 Route::middleware(['guest'])->group(function () {
     Route::controller(RegisterController::class)->group(function () {
         Route::get('/register', 'halaman_register')->name('Register');
-        Route::get('/kota/{provinsi_id}', 'list_kota');
         Route::post('/user-register', 'user_register')->name('UserRegister');
     });
 
@@ -100,6 +102,15 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/hapus-data-slider/{slider_id}', 'hapus_data_slider');
         });
 
+        Route::controller(AdminPengguna_Controller::class)->group(function (){
+            Route::get('/pengguna', 'pengguna')->name('HalamanPengguna');
+            Route::any('/data-pengguna', 'data_pengguna')->name('DataPengguna');
+            Route::get('/detail-pengguna/{kode_pengguna}', 'detail_pengguna')->name('HalamanPengguna.DetailPengguna');
+            Route::any('/data-pesanan-pengguna/{kode_pengguna}', 'data_pesanan_pengguna')->name('DataPesananPengguna');
+            Route::post('/data-penilaian-pesanan-pengguna/{kode_pengguna}', 'data_penilaian_pesanan_pengguna')->name('DataPenilaianPesananPengguna');
+            Route::get('/alamat-pengguna/{alamat_id}', 'alamat_pengguna');
+        });
+
         Route::controller(AdminPesanan_Controller::class)->group(function (){
             Route::get('/halaman_pesanan', 'halaman_pesanan')->name('HalamanPesanan');
             Route::any('/data-pesanan', 'data_pesanan')->name('DataPesanan');
@@ -124,7 +135,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/laporan-pembayaran', 'halaman_laporan_pembayaran')->name('HalamanLaporan.Pembayaran');
             Route::any('/data-laporan-pembayaran', 'data_laporan_pembayaran')->name('DataLaporanPembayaran');
-            Route::post('/cetak-laporan-pembayaran', 'cetak_laporan_pembayaran')->name('CetakLaporanPembayaran');
+            Route::post('/cetak-laporan-pembayaran', 'cetak_laporan_ubah_alamat_penggunapembayaran')->name('CetakLaporanPembayaran');
         });
     });
 
@@ -133,6 +144,14 @@ Route::middleware(['auth'])->group(function () {
 
         Route::controller(ProfilController::class)->group(function (){
             Route::get('/profil', 'profil')->name('HalamanProfil');
+            // Route::post('/ubah-nama-pengguna', 'editable_ubah_nama_pengguna')->name('UbahNamaPengguna');
+            Route::post('/ubah-akun-pengguna', 'ubah_akun_pengguna')->name('UbahAkunPengguna');
+            Route::post('/tambah-alamat-pengguna', 'tambah_alamat_pengguna')->name('TambahAlamatPengguna');
+            Route::get('/data-alamat-customer/{alamat_id}', 'data_alamat_customer');
+            Route::post('/ubah-alamat-pengguna/{alamat_id}', 'ubah_alamat_pengguna')->name('UbahAlamatPengguna');
+            Route::get('/konfirmasi-hapus-alamat/{alamat_id}', 'konfirmasi_hapus_alamat');
+            Route::get('/konfirmasi-alamat-utama/{alamat_id}', 'konfirmasi_alamat_utama');
+            Route::post('/ubah-password-customer', 'ubah_password_customer')->name('UbahPassword');
         });
 
         Route::controller(KeranjangController::class)->group(function (){

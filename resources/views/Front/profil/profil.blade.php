@@ -4,36 +4,93 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-4">
-                    <div class="card card-primary card-outline sticky-content"
+                    <div class="card card-primary card-outline"
                         style="box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2); padding: 1.25rem; min-height: 1px;">
-                        <div class="card-body box-profile">
-                            <div class="text-center">
-                                {{-- <img class="profile-user-img img-fluid img-circle"
-                        src="../../dist/img/user4-128x128.jpg"
-                        alt="User profile picture"> --}}
+                        <div class="card-body box-profile" style="padding:0px !important">
+                            <div class="d-flex justify-content-center mb-2">
+                                <img class="object-fit-fill border"
+                                    style="aspect-ratio: 1/1; border-radius: 11.25rem!important; max-width: 30%;"
+                                    src="{{ asset('storage/' . Auth::user()->foto) }}" alt="User profile picture">
                             </div>
-                            <h3 class="profile-username text-center">{{ Auth::user()->name }}</h3>
-                            <p class="text-muted text-center">Pelanggan</p>
-                            <ul class="list-group list-group-unbordered mb-3">
+
+                            <h5 class="profile-username text-center"><b>Akun dan Keamanan</b></h5>
+                            <ul class="list-group list-group-unbordered mb-3" id="profil-customer">
+
                                 <li class="list-group-item">
-                                    <b>Alamat</b> <a class="float-right">{!! help_alamat_pengguna()->alamat !!}</a>
+                                    <b>Nama Pengguna</b>
+                                    <p href="" class="float-right">{{ Auth::user()->name ?? '' }}</p>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Provinsi</b> <a class="float-right">{!! help_alamat_pengguna()->relasi_provinsi->name !!}</a>
+                                    <b>Jenis Kelamin</b>
+                                    <p href="" class="float-right">{{ Auth::user()->jk ?? '' }}</p>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Kota</b> <a class="float-right">{!! help_alamat_pengguna()->relasi_kota->name !!}</a>
+                                    <b>Email</b>
+                                    <p href="" class="float-right">{{ Auth::user()->email ?? '' }}</p>
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Email</b> <a class="float-right">{{ Auth::user()->email }}</a>
+                                    <b>Nomor HP</b>
+                                    <p href="" class="float-right">{{ Auth::user()->nomor_hp ?? '' }}</p>
                                 </li>
+                                <li class="list-group-item">
+                                    <b>Ganti Password</b>
+                                    <a href="#!" data-toggle="modal" data-target="#ubahPassword"
+                                        class="float-right">...</a>
+                                </li>
+
+                                <li class="list-group-item d-flex align-items-center">
+                                    <a href="#!" class="btn btn-primary btn-block ubah-akun"><b>Ubah Akun</b></a>
+                                </li>
+                                @include('Front.profil.modal._form_ubah_akun')
                             </ul>
-                            <a href="#" class="btn btn-primary btn-block" data-toggle="modal"
-                                data-target="#ubahDataPelanggan"><b>Edit Profil</b></a>
+
+                            <h5 class="profile-username text-center"><b>Alamat Saya</b></h5>
+                            <ul class="list-group list-group-unbordered mb-3" id="alamat-customer">
+
+                                @foreach ($alamat_pengguna as $no => $data_alamat_pengguna)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <b>Alamat {{ $no + 1 }}</b>
+                                        <span class="badge badge-none alamat-utama"
+                                            radio-alamat-id="{{ $data_alamat_pengguna->id }}"><input
+                                                class="form-check-input" type="radio" name="exampleRadios"
+                                                style="margin-top: -0.6rem;"
+                                                @if ($data_alamat_pengguna->alamat_utama == 1) @checked(true) @else @endif></span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex">
+                                            <div class="mr-auto p-2">
+                                                <a class="float-right">{{ $data_alamat_pengguna->alamat }},
+                                                    {{ $data_alamat_pengguna->relasi_provinsi->name }},
+                                                    {{ $data_alamat_pengguna->relasi_kota->name }}</a>
+                                            </div>
+                                            <div class="p-2">
+                                                <a href="javascript:void(0)" id="btn-modal-ubah-alamat"
+                                                    data-id="{{ $data_alamat_pengguna->id }}"
+                                                    class="badge btn-sm btn-primary" style="margin-left: 3px;">Ubah</a>
+                                            </div>
+                                            <div class="p-2"><span type="button"
+                                                    class="badge btn-sm btn-danger hapus-alamat"
+                                                    alamat-id="{{ $data_alamat_pengguna->id }}"
+                                                    style="margin-left: 3px;">Hapus</span></div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                                @if ($total_alamat < 3)
+                                    <li class="list-group-item d-flex align-items-center">
+                                        <a href="#!" class="btn btn-primary btn-block tambah-alamat"><b>Tambah
+                                                Alamat</b></a>
+                                    </li>
+                                @else
+                                @endif
+                            </ul>
+                            @include('Front.profil.modal._form_ubah_alamat')
+                            @include('Front.profil.modal._form_tambah_alamat')
+                            {{-- <a href="#" class="btn btn-primary btn-block" data-toggle="modal"
+                                data-target="#ubahDataPelanggan"><b>Edit Profil</b></a> --}}
                         </div>
                     </div>
                 </div><!-- End .col-lg-6 -->
-
+                @include('Front.profil.modal._form_ubah_password')
                 <div class="col-lg-8" id="tab-content-header-body">
                     <div class="heading heading-flex heading-border mb-3"
                         style="box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2);">
@@ -45,7 +102,8 @@
                                         role="tab">Belum Bayar</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#dibayar-tab" role="tab">Telah Bayar</a>
+                                    <a class="nav-link" data-toggle="tab" href="#dibayar-tab" role="tab">Telah
+                                        Bayar</a>
                                 </li>
                                 {{-- <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#menunggu-verifikasi-tab"
@@ -82,81 +140,118 @@
                 </div><!-- End .col-lg-6 -->
             </div><!-- End .row -->
         </div><!-- End .container -->
-
-        {{-- <div class="col-md-9">
-                    <div class="card"
-                        style="box-shadow: 0 0 1px rgba(0,0,0,.125),0 1px 3px rgba(0,0,0,.2); padding: 1.25rem; min-height: 1px; word-wrap: break-word;">
-                        <div class="card-header p-2"
-                            style="background-color: transparent;border-bottom: 1px solid rgba(0,0,0,.125);padding: .75rem 1.25rem;position: relative;border-top-left-radius: .25rem;border-top-right-radius: .25rem;">
-                            <ul class="nav nav-pills" style="justify-content: space-around;">
-                                <li class="nav-item"><a class="nav-link active" href="#belum_bayar" data-toggle="tab">Belum
-                                        Bayar</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#dikemas" data-toggle="tab">Dikemas</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#dikirim" data-toggle="tab">Dikirim</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#terkirim" data-toggle="tab">Selesai</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#penilaian" data-toggle="tab">Beri
-                                        Penilaian</a></li>
-                            </ul>
-                        </div><!-- /.card-header -->
-                        <div class="page-content">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="card">
-                                        <div class="tab-content">
-                                            @include('Front.profil.belum_bayar')
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.card -->
-                </div> --}}
-
     </div><!-- End .page-content -->
 @endsection
-@section('script')
+@push('script')
     <script>
-        // Product Image Zoom plugin - product pages
-        if ($.fn.elevateZoom) {
-            $('#perbesar-gambar' + pesanan_id).elevateZoom({
-                gallery: 'perbesar-gambar-galeri' + pesanan_id,
-                galleryActiveClass: 'active',
-                zoomType: "inner",
-                cursor: "crosshair",
-                zoomWindowFadeIn: 400,
-                zoomWindowFadeOut: 400,
-                responsive: true
-            });
-
-            // On click change thumbs active item
-            $('.gambar-galeri-item' + pesanan_id).on('click', function(e) {
-                $('#perbesar-gambar-galeri' + pesanan_id).find('a').removeClass('active');
-                $(this).addClass('active');
-
-                e.preventDefault();
-            });
-
-            var ez = $('#perbesar-gambar' + pesanan_id).data('elevateZoom');
-
-            // Open popup - product images
-            $('#btn-gambar-galeri').on('click', function(e) {
-                const pesanan_id = $(event.currentTarget).attr('pesanan-id');
-                if ($.fn.magnificPopup) {
-                    $.magnificPopup.open({
-                        items: ez.getGalleryList(),
-                        type: 'image',
-                        gallery: {
-                            enabled: true
+        $(document).ready(function() {
+            $('select[name="provinsi_id"]').on('change', function() {
+                let provinsi_id = $(this).val();
+                if (provinsi_id) {
+                    jQuery.ajax({
+                        url: '/kota/' + provinsi_id,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(response) {
+                            $('select[name="kota_id"]').empty();
+                            $('select[name="kota_id"]').append(
+                                '<option value="">-- Pilih Kota --</option>');
+                            $.each(response, function(key, value) {
+                                $('select[name="kota_id"]').append('<option value="' +
+                                    key + '">' + value + '</option>');
+                            });
                         },
-                        fixedContentPos: false,
-                        removalDelay: 600,
-                        closeBtnInside: false
-                    }, 0);
-
-                    e.preventDefault();
+                    });
+                } else {
+                    $('select[name="kota_id"]').append('<option value="">-- Pilih Kota --</option>');
                 }
             });
-        }
+        });
+
+        $(document).on('click', '.hapus-alamat', function(event) {
+            const id = $(event.currentTarget).attr('alamat-id');
+            Swal.fire({
+                title: 'Yakin ingin menghapus ?',
+                icon: 'warning',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Batal',
+                showCancelButton: true,
+            }).then(function(result) {
+                if (result.value) {
+                    $.ajax({
+                        url: "/customer/konfirmasi-hapus-alamat/" + id,
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.status_berhasil_hapus_alamat == 1) {
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.addEventListener('mouseenter', Swal
+                                            .stopTimer)
+                                        toast.addEventListener('mouseleave', Swal
+                                            .resumeTimer)
+                                    }
+                                })
+                                Toast.fire({
+                                        icon: 'success',
+                                        title: response.msg
+                                    }),
+                                    $("#alamat-customer").load(location.href +
+                                        " #alamat-customer>*", "");
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '.alamat-utama', function(event) {
+            const id = $(event.currentTarget).attr('radio-alamat-id');
+            Swal.fire({
+                title: 'Yakin ingin mengubah menjadi alamat utama ?',
+                icon: 'warning',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Batal',
+                showCancelButton: true,
+            }).then(function(result) {
+                if (result.value) {
+                    $.ajax({
+                        url: "/customer/konfirmasi-alamat-utama/" + id,
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.status_menjadi_alamat_utama == 1) {
+                                const Toast = Swal.mixin({
+                                    toast: true,
+                                    position: 'top-end',
+                                    showConfirmButton: false,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                    didOpen: (toast) => {
+                                        toast.addEventListener('mouseenter', Swal
+                                            .stopTimer)
+                                        toast.addEventListener('mouseleave', Swal
+                                            .resumeTimer)
+                                    }
+                                })
+                                Toast.fire({
+                                        icon: 'success',
+                                        title: response.msg
+                                    }),
+                                    $("#alamat-customer").load(location.href +
+                                        " #alamat-customer>*", "");
+                            }
+                        }
+                    });
+                } else {
+                    //alert ('no');
+                    $("#alamat-customer").load(location.href +
+                        " #alamat-customer>*", "");
+                }
+            });
+        });
     </script>
-@endsection
+@endpush

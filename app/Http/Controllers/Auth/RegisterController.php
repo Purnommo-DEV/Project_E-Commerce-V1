@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Kota;
 use App\Models\User;
-use App\Models\Provinsi;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\Alamat;
+use App\Models\Provinsi;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -58,6 +59,7 @@ class RegisterController extends Controller
             $user_register = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
+                'kode' => 'CSR-' . Str::random('32'),
                 'password' => Hash::make($request->password),
                 'role_id' => 2
             ]);

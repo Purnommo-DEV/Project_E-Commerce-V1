@@ -10,7 +10,7 @@ class Alamat extends Model
 {
     use HasFactory;
     protected $table = 'alamat';
-    protected $guarded = ['id'];
+    protected $guarded = [];
 
     public static function func_alamat_engguna(){
         $alamat_pengguna = Alamat::where([

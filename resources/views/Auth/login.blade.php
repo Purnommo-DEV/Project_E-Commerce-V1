@@ -52,7 +52,7 @@
                             <div class="col col-12">
                                 <div class="form-footer d-flex justify-content-center">
                                     Belum punya akun? <a href="{{ route('Register') }}" style="text-decoration:none;">&nbsp;
-                                        <strong style="color: #c96">
+                                        <strong style="color: #0078b1">
                                             Daftar</strong></a>
                                 </div><!-- End .form-footer -->
                             </div>

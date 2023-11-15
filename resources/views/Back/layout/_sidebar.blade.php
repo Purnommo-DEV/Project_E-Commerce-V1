@@ -42,6 +42,12 @@
                          <span>Slider</span>
                      </a>
                  </li>
+                 <li class="sidebar-item {{ request()->routeIs('admin.HalamanPengguna*') ? 'active' : '' }}">
+                     <a href="{{ route('admin.HalamanPengguna') }}" class='sidebar-link'>
+                         <i class="bi bi-people"></i>
+                         <span>Pengguna</span>
+                     </a>
+                 </li>
                  <li class="sidebar-item {{ request()->routeIs('admin.HalamanPesanan*') ? 'active' : '' }}">
                      <a href="{{ route('admin.HalamanPesanan') }}" class='sidebar-link'>
                          <i class="bi bi-basket-fill"></i>

@@ -187,14 +187,14 @@
                                                 style="color: black; padding-left: 2rem; padding-right: 2rem;">
                                                 <button type="submit"
                                                     class="btn btn-outline-primary btn-block mb-3 tombols"
-                                                    style="color: #c96; border-color:#c96; border-radius:1rem;"><span>Lanjut
+                                                    style="color: #0078b1; border-color:#0078b1; border-radius:1rem;"><span>Lanjut
                                                         Pembayaran</span></button>
                                             </th>
                                         </tr>
                                     </tbody>
                                 </table>
                                 {{-- <button type="submit" class="btn btn-outline-primary btn-block mb-3 tombols"
-                                    style="color: #c96; border-color:#c96;"><span>Buat Pesanan</span></button> --}}
+                                    style="color: #0078b1; border-color:#0078b1;"><span>Buat Pesanan</span></button> --}}
                                 {{-- <input type="hidden" name="total_berat" value="{{ $total_berat }}">
                                     <input type="hidden" id="totalBayar" name="total_bayar" value="">
                                     <input type="hidden" id="jasaPengiriman" name="pengiriman" value=""> --}}

@@ -21,10 +21,10 @@
                     <a href="{{ route('HalamanDetailProduk', $data_produk->slug) }}" class="w-100">
                         <img src="{{ asset('storage/' . $gambar_produk_first->path) }}" alt="Product image"
                             class="product-image"
-                            style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover;">
+                            style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover; border-radius: 0px !important;">
                         <img src="{{ asset('storage/' . $gambar_produk_last->path) }}" alt="Product image"
                             class="product-image-hover"
-                            style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover;">
+                            style="aspect-ratio: 5/4; padding: 0rem !important; object-fit: cover; border-radius: 0px !important;">
                     </a>
                     {{-- <div class="product-countdown bg-light" data-until="+55h" data-relative="true"
                 data-labels-short="true"></div>

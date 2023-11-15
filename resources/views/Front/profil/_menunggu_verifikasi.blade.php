@@ -63,7 +63,7 @@
                         <div class="d-flex align-items-start flex-column bd-highlight">
                             <div class="mt-1 mb-1 bd-highlight">
                                 <a id="btn-gambar-galeri" pesanan-id="{{ $data_pesanan->id }}"
-                                    style="padding-left: 1rem; font-size: 1.3rem; color:#c96; font-weight:500;"
+                                    style="padding-left: 1rem; font-size: 1.3rem; color:#0078b1; font-weight:500;"
                                     href="#!">Lihat
                                     Bukti Pembayaran</a>
                             </div>
