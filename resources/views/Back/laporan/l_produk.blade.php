@@ -76,16 +76,6 @@
                                     <th>Stok</th>
                                 </tr>
                             </thead>
-                            {{-- <tbody>
-                                @foreach ($data as $index => $data_pendapatan)
-                                    <tr>
-                                        <td>{{ $data_pendapatan->tanggal }}</td>
-                                        <td>{{ $data_pendapatan->total_pesanan }}</td>
-                                        <td>{{ $data_pendapatan->alias_total_pendapatan_kotor }}</td>
-                                        <td>{{ $data_pendapatan->alias_total_ongkir }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody> --}}
                         </table>
                     </div>
                 </div>
